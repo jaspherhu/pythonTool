@@ -1,0 +1,26 @@
+[
+    {
+        "name": "item1",
+        "len": 3,
+        "date_str": "333438393637",
+        "date_hex": "333438393637",
+        "type": "BIN",
+        "date_parse": "333438393637"
+    },
+    {
+        "name": "item2",
+        "len": 2,
+        "date_str": "34353738",
+        "date_hex": "34353738",
+        "type": "STRING",
+        "date_parse": "34353738"
+    },
+    {
+        "name": "item3",
+        "len": 4,
+        "date_str": "3334393030313230",
+        "date_hex": "3334393030313230",
+        "type": "STRING",
+        "date_parse": "3334393030313230"
+    }
+]

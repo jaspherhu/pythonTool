@@ -1,0 +1,30 @@
+[2024-06-07 12:07:46] AA F5 4C 00 C9 00 3C F4 03 09 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 20 00 00 00 00 00 00 00 00 00 00 53 00 E9 FF 00 00 00 00 45 1E 
+[2024-06-07 12:07:48] AA F5 4C 00 C9 00 3C F4 03 09 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 20 00 00 00 00 00 00 00 00 00 00 53 00 E9 FF 00 00 00 00 45 1E 
+[2024-06-07 12:07:48] AA F5 4C 00 C9 00 3C F4 03 09 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 20 00 00 00 00 00 00 00 00 00 00 53 00 E9 FF 00 00 00 00 45 1E 
+[2024-06-07 12:07:49] AA F5 4C 00 C9 00 3C F4 03 09 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 20 00 00 00 00 00 00 00 00 00 00 53 00 E9 FF 00 00 00 00 45 1E 
+[2024-06-07 12:07:49] AA F5 4C 00 C9 00 3C F4 03 09 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 20 00 00 00 00 00 00 00 00 00 00 53 00 E9 FF 00 00 00 00 45 1E 
+[2024-06-07 12:07:50] AA F5 4C 00 C9 00 3C F4 03 09 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 20 00 00 00 00 00 00 00 00 00 00 53 00 E9 FF 00 00 00 00 45 1E 
+[2024-06-07 12:14:24] ewewe
+[2024-06-07 12:16:11] dgdgddf
+[2024-06-07 12:16:12] dgdgddf
+[2024-06-07 12:19:55] if self.server_socket:
+            self.server_socket.close()
+            self.server_socket = None
+[2024-06-07 12:19:56] if self.server_socket:
+            self.server_socket.close()
+            self.server_socket = None
+[2024-06-07 12:19:56] if self.server_socket:
+            self.server_socket.close()
+            self.server_socket = None
+[2024-06-07 12:29:20] if e.errno == errno.EWOULDBLOCK or e.errno == errno.EAGAIN: 
+[2024-06-07 12:29:22] if e.errno == errno.EWOULDBLOCK or e.errno == errno.EAGAIN: 
+[2024-06-07 12:29:23] if e.errno == errno.EWOULDBLOCK or e.errno == errno.EAGAIN: 
+[2024-06-07 12:29:23] if e.errno == errno.EWOULDBLOCK or e.errno == errno.EAGAIN: 
+[2024-06-07 12:29:24] if e.errno == errno.EWOULDBLOCK or e.errno == errno.EAGAIN: 
+[2024-06-07 12:29:24] if e.errno == errno.EWOULDBLOCK or e.errno == errno.EAGAIN: 
+[2024-06-07 12:34:06] if self.listen_thread and self.listen_thread.is_alive():
+            tk.messagebox.showinfo("Info", "Run listening OK.")
+[2024-06-07 12:35:04] if self.listen_thread.is_alive():
+[2024-06-07 12:35:07] if self.listen_thread.is_alive():
+[2024-06-07 12:42:46] self.stop_event.set()#抛出一个异常来让线程停止监听
+[2024-06-07 12:42:47] self.stop_event.set()#抛出一个异常来让线程停止监听

@@ -1,0 +1,965 @@
+{
+    "cmd": 112,
+    "len": 786,
+    "seq": 13330,
+    "hd_type": 1,
+    "hd_adr": 8,
+    "hd_gun": 2,
+    "body": [
+        {
+            "name": "item1",
+            "len": 3,
+            "date_hex": "348967",
+            "type": "BIN",
+            "date_parse": 6785332
+        },
+        {
+            "name": "item2",
+            "len": 2,
+            "date_hex": "4578",
+            "type": "STR",
+            "date_parse": "Ex"
+        },
+        {
+            "name": "item3",
+            "len": 4,
+            "date_hex": "34383633",
+            "type": "STR",
+            "date_parse": "4863"
+        }
+    ]
+}
+{
+    "cmd": 112,
+    "len": 786,
+    "seq": 13330,
+    "hd_type": 1,
+    "hd_adr": 8,
+    "hd_gun": 2,
+    "body": [
+        {
+            "name": "item1",
+            "len": 3,
+            "date_hex": "348967",
+            "type": "BIN",
+            "date_parse": 6785332
+        },
+        {
+            "name": "item2",
+            "len": 2,
+            "date_hex": "4578",
+            "type": "STR",
+            "date_parse": "Ex"
+        },
+        {
+            "name": "item3",
+            "len": 4,
+            "date_hex": "34383633",
+            "type": "STR",
+            "date_parse": "4863"
+        }
+    ]
+}
+{
+    "cmd": 112,
+    "len": 786,
+    "seq": 13330,
+    "hd_type": 1,
+    "hd_adr": 8,
+    "hd_gun": 2,
+    "body": [
+        {
+            "name": "item1",
+            "len": 3,
+            "date_hex": "348967",
+            "type": "BIN",
+            "date_parse": 6785332
+        },
+        {
+            "name": "item2",
+            "len": 2,
+            "date_hex": "4578",
+            "type": "STR",
+            "date_parse": "Ex"
+        },
+        {
+            "name": "item3",
+            "len": 4,
+            "date_hex": "34383633",
+            "type": "STR",
+            "date_parse": "4863"
+        }
+    ]
+}
+{
+    "cmd": 112,
+    "len": 786,
+    "seq": 13330,
+    "hd_type": 1,
+    "hd_adr": 8,
+    "hd_gun": 2,
+    "body": [
+        {
+            "name": "item1",
+            "len": 3,
+            "date_hex": "348967",
+            "type": "BIN",
+            "date_parse": 6785332
+        },
+        {
+            "name": "item2",
+            "len": 2,
+            "date_hex": "4578",
+            "type": "STR",
+            "date_parse": "Ex"
+        },
+        {
+            "name": "item3",
+            "len": 4,
+            "date_hex": "34383633",
+            "type": "STR",
+            "date_parse": "4863"
+        }
+    ]
+}
+{
+    "cmd": 112,
+    "len": 786,
+    "seq": 13330,
+    "hd_type": 1,
+    "hd_adr": 8,
+    "hd_gun": 2,
+    "body": [
+        {
+            "name": "item1",
+            "len": 3,
+            "date_hex": "348967",
+            "type": "BIN",
+            "date_parse": 6785332
+        },
+        {
+            "name": "item2",
+            "len": 2,
+            "date_hex": "4578",
+            "type": "STR",
+            "date_parse": "Ex"
+        },
+        {
+            "name": "item3",
+            "len": 4,
+            "date_hex": "34383633",
+            "type": "STR",
+            "date_parse": "4863"
+        }
+    ]
+}
+{
+    "cmd": 112,
+    "len": 786,
+    "seq": 13330,
+    "hd_type": 1,
+    "hd_adr": 8,
+    "hd_gun": 2,
+    "body": [
+        {
+            "name": "item1",
+            "len": 3,
+            "date_hex": "348967",
+            "type": "BIN",
+            "date_parse": 6785332
+        },
+        {
+            "name": "item2",
+            "len": 2,
+            "date_hex": "4578",
+            "type": "STR",
+            "date_parse": "Ex"
+        },
+        {
+            "name": "item3",
+            "len": 4,
+            "date_hex": "34383633",
+            "type": "STR",
+            "date_parse": "4863"
+        }
+    ]
+}
+{
+    "cmd": 112,
+    "len": 786,
+    "seq": 13330,
+    "hd_type": 1,
+    "hd_adr": 8,
+    "hd_gun": 2,
+    "body": [
+        {
+            "name": "item1",
+            "len": 3,
+            "date_hex": "348967",
+            "type": "BIN",
+            "date_parse": 6785332
+        },
+        {
+            "name": "item2",
+            "len": 2,
+            "date_hex": "4578",
+            "type": "STR",
+            "date_parse": "Ex"
+        },
+        {
+            "name": "item3",
+            "len": 4,
+            "date_hex": "34383633",
+            "type": "STR",
+            "date_parse": "4863"
+        }
+    ]
+}
+null
+null
+{
+    "cmd": 112,
+    "len": 301,
+    "seq": 55685,
+    "hd_type": 2,
+    "hd_adr": 33,
+    "hd_gun": 0,
+    "body": [
+        {
+            "name": "item1",
+            "len": 3,
+            "date_hex": "0140C0",
+            "type": "BIN",
+            "date_parse": 12599297
+        },
+        {
+            "name": "item2",
+            "len": 2,
+            "date_hex": "4900",
+            "type": "STR",
+            "date_parse": "I\u0000"
+        },
+        {
+            "name": "item3",
+            "len": 4,
+            "date_hex": "07000000",
+            "type": "STR",
+            "date_parse": "\u0007\u0000\u0000\u0000"
+        }
+    ]
+}
+{
+    "cmd": 201,
+    "len": 76,
+    "seq": 62524,
+    "hd_type": 3,
+    "hd_adr": 9,
+    "hd_gun": 1,
+    "body": [
+        {
+            "name": "工作状态",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态A",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态B",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态C",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态D",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "并充主枪的枪号",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前电表读数",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "本次充电累计充电电量",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前充电功率",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "终端充电状态(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电压(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电流(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "充电模式",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电流",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样的模块电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样电池电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "单枪实际输出电流",
+            "len": 2,
+            "date_hex": "0020",
+            "type": "BIN",
+            "date_parse": 8192
+        },
+        {
+            "name": "总直流充电电流(并充)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        }
+    ]
+}
+{
+    "cmd": 201,
+    "len": 76,
+    "seq": 62524,
+    "hd_type": 3,
+    "hd_adr": 9,
+    "hd_gun": 1,
+    "body": [
+        {
+            "name": "工作状态",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态A",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态B",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态C",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态D",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "并充主枪的枪号",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前电表读数",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "本次充电累计充电电量",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前充电功率",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "终端充电状态(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电压(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电流(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "充电模式",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电流",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样的模块电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样电池电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "单枪实际输出电流",
+            "len": 2,
+            "date_hex": "0020",
+            "type": "BIN",
+            "date_parse": 8192
+        },
+        {
+            "name": "总直流充电电流(并充)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        }
+    ]
+}
+{
+    "cmd": 201,
+    "len": 76,
+    "seq": 62524,
+    "hd_type": 3,
+    "hd_adr": 9,
+    "hd_gun": 1,
+    "body": [
+        {
+            "name": "工作状态",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态A",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态B",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态C",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态D",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "并充主枪的枪号",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前电表读数",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "本次充电累计充电电量",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前充电功率",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "终端充电状态(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电压(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电流(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "充电模式",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电流",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样的模块电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样电池电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "单枪实际输出电流",
+            "len": 2,
+            "date_hex": "0020",
+            "type": "BIN",
+            "date_parse": 8192
+        },
+        {
+            "name": "总直流充电电流(并充)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        }
+    ]
+}
+{
+    "cmd": 201,
+    "len": 76,
+    "seq": 62524,
+    "hd_type": 3,
+    "hd_adr": 9,
+    "hd_gun": 1,
+    "body": [
+        {
+            "name": "工作状态",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态A",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态B",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态C",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态D",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "并充主枪的枪号",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前电表读数",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "本次充电累计充电电量",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前充电功率",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "终端充电状态(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电压(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电流(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "充电模式",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电流",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样的模块电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样电池电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "单枪实际输出电流",
+            "len": 2,
+            "date_hex": "0020",
+            "type": "BIN",
+            "date_parse": 8192
+        },
+        {
+            "name": "总直流充电电流(并充)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        }
+    ]
+}
+{
+    "cmd": 201,
+    "len": 76,
+    "seq": 62524,
+    "hd_type": 3,
+    "hd_adr": 9,
+    "hd_gun": 1,
+    "body": [
+        {
+            "name": "工作状态",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态A",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态B",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态C",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪故障状态D",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "并充主枪的枪号",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前电表读数",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "本次充电累计充电电量",
+            "len": 4,
+            "date_hex": "00000000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "当前充电功率",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "终端充电状态(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电压(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪需要输出的电流(发给主机)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "充电模式",
+            "len": 1,
+            "date_hex": "00",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "BMS需求电流",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样的模块电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "枪采样电池电压",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        },
+        {
+            "name": "单枪实际输出电流",
+            "len": 2,
+            "date_hex": "0020",
+            "type": "BIN",
+            "date_parse": 8192
+        },
+        {
+            "name": "总直流充电电流(并充)",
+            "len": 2,
+            "date_hex": "0000",
+            "type": "BIN",
+            "date_parse": 0
+        }
+    ]
+}

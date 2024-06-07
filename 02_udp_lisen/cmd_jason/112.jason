@@ -1,0 +1,17 @@
+[
+    {
+        "name": "item1",
+        "len": 3,
+        "type": "BIN"
+    },
+    {
+        "name": "item2",
+        "len": 2,
+        "type": "STR"
+    },
+    {
+        "name": "item3",
+        "len": 4,
+        "type": "STR"
+    }
+]

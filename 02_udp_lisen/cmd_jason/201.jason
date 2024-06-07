@@ -1,0 +1,97 @@
+[
+    {
+        "name": "工作状态",
+        "len": 1,
+        "type": "BIN"
+    },
+    {
+        "name": "枪故障状态A",
+        "len": 4,
+        "type": "BIN"
+    },
+    {
+        "name": "枪故障状态B",
+        "len": 4,
+        "type": "BIN"
+    },
+    {
+        "name": "枪故障状态C",
+        "len": 4,
+        "type": "BIN"
+    },
+    {
+        "name": "枪故障状态D",
+        "len": 4,
+        "type": "BIN"
+    },
+    {
+        "name": "并充主枪的枪号",
+        "len": 1,
+        "type": "BIN"
+    },
+    {
+        "name": "当前电表读数",
+        "len": 4,
+        "type": "BIN"
+    },
+    {
+        "name": "本次充电累计充电电量",
+        "len": 4,
+        "type": "BIN"
+    },
+    {
+        "name": "当前充电功率",
+        "len": 2,
+        "type": "BIN"
+    },
+    {
+        "name": "终端充电状态(发给主机)",
+        "len": 2,
+        "type": "BIN"
+    },
+    {
+        "name": "枪需要输出的电压(发给主机)",
+        "len": 2,
+        "type": "BIN"
+    },
+    {
+        "name": "枪需要输出的电流(发给主机)",
+        "len": 2,
+        "type": "BIN"
+    },
+    {
+        "name": "充电模式",
+        "len": 1,
+        "type": "BIN"
+    },
+    {
+        "name": "BMS需求电压",
+        "len": 2,
+        "type": "BIN"
+    },
+    {
+        "name": "BMS需求电流",
+        "len": 2,
+        "type": "BIN"
+    },
+    {
+        "name": "枪采样的模块电压",
+        "len": 2,
+        "type": "BIN"
+    },
+    {
+        "name": "枪采样电池电压",
+        "len": 2,
+        "type": "BIN"
+    },
+    {
+        "name": "单枪实际输出电流",
+        "len": 2,
+        "type": "BIN"
+    },
+    {
+        "name": "总直流充电电流(并充)",
+        "len": 2,
+        "type": "BIN"
+    }
+]
