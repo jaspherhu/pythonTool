@@ -1,0 +1,116 @@
+{
+    "status": "ok",
+    "datas": {
+        "db": {
+            "myspider": {
+                "9a6cb4fa1b2511efbf78f46add6ccf98": {
+                    "log_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs\\db\\myspider\\9a6cb4fa1b2511efbf78f46add6ccf98.log",
+                    "json_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs/db\\myspider\\9a6cb4fa1b2511efbf78f46add6ccf98.json",
+                    "json_url": "http://127.0.0.1:6800/logs/db/myspider/9a6cb4fa1b2511efbf78f46add6ccf98.json",
+                    "size": 7441,
+                    "position": 7441,
+                    "status": "ok",
+                    "pages": 2,
+                    "items": 0,
+                    "first_log_time": "2024-05-26 14:03:02",
+                    "latest_log_time": "2024-05-26 14:03:03",
+                    "runtime": "0:00:01",
+                    "shutdown_reason": "N/A",
+                    "finish_reason": "finished",
+                    "last_update_time": "2024-05-26 15:24:00"
+                },
+                "2024-05-29T18_01_51": {
+                    "log_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs\\db\\myspider\\2024-05-29T18_01_51.log",
+                    "json_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs/db\\myspider\\2024-05-29T18_01_51.json",
+                    "json_url": "http://127.0.0.1:6800/logs/db/myspider/2024-05-29T18_01_51.json",
+                    "size": 6360,
+                    "position": 6360,
+                    "status": "ok",
+                    "pages": 1,
+                    "items": 0,
+                    "first_log_time": "2024-05-29 18:01:53",
+                    "latest_log_time": "2024-05-29 18:01:55",
+                    "runtime": "0:00:02",
+                    "shutdown_reason": "N/A",
+                    "finish_reason": "finished",
+                    "last_update_time": "2024-05-29 18:01:56"
+                },
+                "2024-05-29T18_03_14": {
+                    "log_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs\\db\\myspider\\2024-05-29T18_03_14.log",
+                    "json_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs/db\\myspider\\2024-05-29T18_03_14.json",
+                    "json_url": "http://127.0.0.1:6800/logs/db/myspider/2024-05-29T18_03_14.json",
+                    "size": 6360,
+                    "position": 6360,
+                    "status": "ok",
+                    "pages": 1,
+                    "items": 0,
+                    "first_log_time": "2024-05-29 18:03:18",
+                    "latest_log_time": "2024-05-29 18:03:20",
+                    "runtime": "0:00:02",
+                    "shutdown_reason": "N/A",
+                    "finish_reason": "finished",
+                    "last_update_time": "2024-05-29 18:03:26"
+                },
+                "2024-05-29T18_04_36": {
+                    "log_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs\\db\\myspider\\2024-05-29T18_04_36.log",
+                    "json_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs/db\\myspider\\2024-05-29T18_04_36.json",
+                    "json_url": "http://127.0.0.1:6800/logs/db/myspider/2024-05-29T18_04_36.json",
+                    "size": 3810565,
+                    "position": 3810565,
+                    "status": "ok",
+                    "pages": 1,
+                    "items": 0,
+                    "first_log_time": "2024-05-29 18:04:38",
+                    "latest_log_time": "2024-05-29 20:57:15",
+                    "runtime": "2:52:37",
+                    "shutdown_reason": "N/A",
+                    "finish_reason": "finished",
+                    "last_update_time": "2024-05-29 20:57:19"
+                }
+            },
+            "mv_kk52": {
+                "2024-05-29T17_46_33": {
+                    "log_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs\\db\\mv_kk52\\2024-05-29T17_46_33.log",
+                    "json_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs/db\\mv_kk52\\2024-05-29T17_46_33.json",
+                    "json_url": "http://127.0.0.1:6800/logs/db/mv_kk52/2024-05-29T17_46_33.json",
+                    "size": 39592549,
+                    "position": 39592549,
+                    "status": "ok",
+                    "pages": 427,
+                    "items": 0,
+                    "first_log_time": "2024-05-29 17:46:44",
+                    "latest_log_time": "2024-05-29 17:48:32",
+                    "runtime": "0:01:48",
+                    "shutdown_reason": "N/A",
+                    "finish_reason": "finished",
+                    "last_update_time": "2024-05-29 17:48:36"
+                }
+            }
+        }
+    },
+    "settings_py": "E:/Python311/Lib/site-packages/logparser/settings.py",
+    "settings": {
+        "scrapyd_server": "127.0.0.1:6800",
+        "scrapyd_logs_dir": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs/",
+        "parse_round_interval": 10,
+        "enable_telnet": true,
+        "override_telnet_console_host": "",
+        "log_encoding": "utf-8",
+        "log_extensions": [
+            ".log",
+            ".txt"
+        ],
+        "log_head_lines": 100,
+        "log_tail_lines": 200,
+        "log_categories_limit": 10,
+        "jobs_to_keep": 100,
+        "chunk_size": 10000000,
+        "delete_existing_json_files_at_startup": false,
+        "keep_data_in_memory": false,
+        "verbose": false,
+        "main_pid": 57240
+    },
+    "last_update_timestamp": 1716987910,
+    "last_update_time": "2024-05-29 21:05:10",
+    "logparser_version": "0.8.2"
+}

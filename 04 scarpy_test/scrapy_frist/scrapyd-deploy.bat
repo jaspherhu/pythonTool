@@ -1,0 +1,1 @@
+"E:\Python311\python.exe" "E:\Python311\Scripts\scrapyd-deploy" %*

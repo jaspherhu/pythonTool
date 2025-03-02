@@ -1,0 +1,1 @@
+cmd /k "cd /d E:\Python311\Lib\site-packages\scrapydweb&&scrapydweb"

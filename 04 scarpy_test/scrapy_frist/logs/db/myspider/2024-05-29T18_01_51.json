@@ -1,0 +1,102 @@
+{
+    "log_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs\\db\\myspider\\2024-05-29T18_01_51.log",
+    "json_path": "d:/gitee/py_tool/03 scarpy_test/scrapy_frist/logs/db\\myspider\\2024-05-29T18_01_51.json",
+    "json_url": "http://127.0.0.1:6800/logs/db/myspider/2024-05-29T18_01_51.json",
+    "size": 6360,
+    "position": 6360,
+    "status": "ok",
+    "_head": 100,
+    "head": "2024-05-29 18:01:53 [scrapy.utils.log] INFO: Scrapy 2.11.2 started (bot: scrapy_frist)\n2024-05-29 18:01:53 [scrapy.utils.log] INFO: Versions: lxml 5.2.2.0, libxml2 2.11.7, cssselect 1.2.0, parsel 1.9.1, w3lib 2.0.0, Twisted 24.3.0, Python 3.11.2 (tags/v3.11.2:878ead1, Feb  7 2023, 16:38:35) [MSC v.1934 64 bit (AMD64)], pyOpenSSL 24.1.0 (OpenSSL 3.2.1 30 Jan 2024), cryptography 42.0.5, Platform Windows-10-10.0.22631-SP0\n2024-05-29 18:01:53 [scrapy.addons] INFO: Enabled addons:\n[]\n2024-05-29 18:01:53 [asyncio] DEBUG: Using selector: SelectSelector\n2024-05-29 18:01:53 [scrapy.utils.log] DEBUG: Using reactor: twisted.internet.asyncioreactor.AsyncioSelectorReactor\n2024-05-29 18:01:53 [scrapy.utils.log] DEBUG: Using asyncio event loop: asyncio.windows_events._WindowsSelectorEventLoop\n2024-05-29 18:01:53 [scrapy.extensions.telnet] INFO: Telnet Password: 2350ebab91abd2e8\n2024-05-29 18:01:54 [scrapy.middleware] INFO: Enabled extensions:\n['scrapy.extensions.corestats.CoreStats',\n 'scrapy.extensions.telnet.TelnetConsole',\n 'scrapy.extensions.logstats.LogStats']\n2024-05-29 18:01:54 [scrapy.crawler] INFO: Overridden settings:\n{'BOT_NAME': 'scrapy_frist',\n 'FEED_EXPORT_ENCODING': 'utf-8',\n 'LOG_FILE': 'logs\\\\db\\\\myspider\\\\2024-05-29T18_01_51.log',\n 'NEWSPIDER_MODULE': 'scrapy_frist.spiders',\n 'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7',\n 'SPIDER_MODULES': ['scrapy_frist.spiders'],\n 'TWISTED_REACTOR': 'twisted.internet.asyncioreactor.AsyncioSelectorReactor',\n 'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '\n               '(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 '\n               'Edg/122.0.0.0'}\n2024-05-29 18:01:54 [scrapy.middleware] INFO: Enabled downloader middlewares:\n['scrapy.downloadermiddlewares.offsite.OffsiteMiddleware',\n 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',\n 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',\n 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',\n 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',\n 'scrapy.downloadermiddlewares.retry.RetryMiddleware',\n 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',\n 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',\n 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',\n 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',\n 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',\n 'scrapy.downloadermiddlewares.stats.DownloaderStats']\n2024-05-29 18:01:54 [scrapy.middleware] INFO: Enabled spider middlewares:\n['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',\n 'scrapy.spidermiddlewares.referer.RefererMiddleware',\n 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',\n 'scrapy.spidermiddlewares.depth.DepthMiddleware']\n2024-05-29 18:01:54 [scrapy.middleware] INFO: Enabled item pipelines:\n['scrapy_frist.pipelines.ScrapyThridPipeline']\n2024-05-29 18:01:54 [scrapy.core.engine] INFO: Spider opened\n2024-05-29 18:01:54 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)\n2024-05-29 18:01:54 [scrapy.extensions.telnet] INFO: Telnet console listening on 127.0.0.1:6023\n2024-05-29 18:01:54 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.runoob.com/> (referer: None)\n2024-05-29 18:01:55 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.runoob.com/> (referer: None)\nTraceback (most recent call last):\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\utils\\defer.py\", line 279, in iter_errback\n    yield next(it)\n          ^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\utils\\python.py\", line 350, in __next__\n    return next(self.data)\n           ^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\utils\\python.py\", line 350, in __next__\n    return next(self.data)\n           ^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\n    for r in iterable:\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\spidermiddlewares\\referer.py\", line 352, in <genexpr>\n    return (self._set_referer(r, response) for r in result or ())\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\n    for r in iterable:\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\spidermiddlewares\\urllength.py\", line 27, in <genexpr>\n    return (r for r in result or () if self._filter(r, spider))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\n    for r in iterable:\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\spidermiddlewares\\depth.py\", line 31, in <genexpr>\n    return (r for r in result or () if self._filter(r, response, spider))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\n    for r in iterable:\n  File \"D:\\gitee\\py_tool\\03 scarpy_test\\scrapy_frist\\scrapy_frist\\spiders\\myspider.py\", line 20, in parse\n    item['name'] = re.sub(matchs,'',name_t)\n                   ^^\nNameError: name 're' is not defined\n2024-05-29 18:01:55 [scrapy.core.engine] INFO: Closing spider (finished)\n2024-05-29 18:01:55 [scrapy.statscollectors] INFO: Dumping Scrapy stats:\n{'downloader/request_bytes': 305,\n 'downloader/request_count': 1,\n 'downloader/request_method_count/GET': 1,\n 'downloader/response_bytes': 203997,\n 'downloader/response_count': 1,\n 'downloader/response_status_count/200': 1,\n 'elapsed_time_seconds': 0.404725,\n 'finish_reason': 'finished',\n 'finish_time': datetime.datetime(2024, 5, 29, 10, 1, 55, 90930, tzinfo=datetime.timezone.utc),\n 'httpcompression/response_bytes': 330414,\n 'httpcompression/response_count': 1,\n 'log_count/DEBUG': 4,\n 'log_count/ERROR': 1,\n 'log_count/INFO': 10,\n 'response_received_count': 1,\n 'scheduler/dequeued': 1,\n 'scheduler/dequeued/memory': 1,\n 'scheduler/enqueued': 1,\n 'scheduler/enqueued/memory': 1,",
+    "tail": "2024-05-29 18:01:53 [scrapy.utils.log] INFO: Scrapy 2.11.2 started (bot: scrapy_frist)\n2024-05-29 18:01:53 [scrapy.utils.log] INFO: Versions: lxml 5.2.2.0, libxml2 2.11.7, cssselect 1.2.0, parsel 1.9.1, w3lib 2.0.0, Twisted 24.3.0, Python 3.11.2 (tags/v3.11.2:878ead1, Feb  7 2023, 16:38:35) [MSC v.1934 64 bit (AMD64)], pyOpenSSL 24.1.0 (OpenSSL 3.2.1 30 Jan 2024), cryptography 42.0.5, Platform Windows-10-10.0.22631-SP0\n2024-05-29 18:01:53 [scrapy.addons] INFO: Enabled addons:\n[]\n2024-05-29 18:01:53 [asyncio] DEBUG: Using selector: SelectSelector\n2024-05-29 18:01:53 [scrapy.utils.log] DEBUG: Using reactor: twisted.internet.asyncioreactor.AsyncioSelectorReactor\n2024-05-29 18:01:53 [scrapy.utils.log] DEBUG: Using asyncio event loop: asyncio.windows_events._WindowsSelectorEventLoop\n2024-05-29 18:01:53 [scrapy.extensions.telnet] INFO: Telnet Password: 2350ebab91abd2e8\n2024-05-29 18:01:54 [scrapy.middleware] INFO: Enabled extensions:\n['scrapy.extensions.corestats.CoreStats',\n 'scrapy.extensions.telnet.TelnetConsole',\n 'scrapy.extensions.logstats.LogStats']\n2024-05-29 18:01:54 [scrapy.crawler] INFO: Overridden settings:\n{'BOT_NAME': 'scrapy_frist',\n 'FEED_EXPORT_ENCODING': 'utf-8',\n 'LOG_FILE': 'logs\\\\db\\\\myspider\\\\2024-05-29T18_01_51.log',\n 'NEWSPIDER_MODULE': 'scrapy_frist.spiders',\n 'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7',\n 'SPIDER_MODULES': ['scrapy_frist.spiders'],\n 'TWISTED_REACTOR': 'twisted.internet.asyncioreactor.AsyncioSelectorReactor',\n 'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '\n               '(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 '\n               'Edg/122.0.0.0'}\n2024-05-29 18:01:54 [scrapy.middleware] INFO: Enabled downloader middlewares:\n['scrapy.downloadermiddlewares.offsite.OffsiteMiddleware',\n 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',\n 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',\n 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',\n 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',\n 'scrapy.downloadermiddlewares.retry.RetryMiddleware',\n 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',\n 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',\n 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',\n 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',\n 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',\n 'scrapy.downloadermiddlewares.stats.DownloaderStats']\n2024-05-29 18:01:54 [scrapy.middleware] INFO: Enabled spider middlewares:\n['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',\n 'scrapy.spidermiddlewares.referer.RefererMiddleware',\n 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',\n 'scrapy.spidermiddlewares.depth.DepthMiddleware']\n2024-05-29 18:01:54 [scrapy.middleware] INFO: Enabled item pipelines:\n['scrapy_frist.pipelines.ScrapyThridPipeline']\n2024-05-29 18:01:54 [scrapy.core.engine] INFO: Spider opened\n2024-05-29 18:01:54 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)\n2024-05-29 18:01:54 [scrapy.extensions.telnet] INFO: Telnet console listening on 127.0.0.1:6023\n2024-05-29 18:01:54 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.runoob.com/> (referer: None)\n2024-05-29 18:01:55 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.runoob.com/> (referer: None)\nTraceback (most recent call last):\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\utils\\defer.py\", line 279, in iter_errback\n    yield next(it)\n          ^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\utils\\python.py\", line 350, in __next__\n    return next(self.data)\n           ^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\utils\\python.py\", line 350, in __next__\n    return next(self.data)\n           ^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\n    for r in iterable:\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\spidermiddlewares\\referer.py\", line 352, in <genexpr>\n    return (self._set_referer(r, response) for r in result or ())\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\n    for r in iterable:\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\spidermiddlewares\\urllength.py\", line 27, in <genexpr>\n    return (r for r in result or () if self._filter(r, spider))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\n    for r in iterable:\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\spidermiddlewares\\depth.py\", line 31, in <genexpr>\n    return (r for r in result or () if self._filter(r, response, spider))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\n    for r in iterable:\n  File \"D:\\gitee\\py_tool\\03 scarpy_test\\scrapy_frist\\scrapy_frist\\spiders\\myspider.py\", line 20, in parse\n    item['name'] = re.sub(matchs,'',name_t)\n                   ^^\nNameError: name 're' is not defined\n2024-05-29 18:01:55 [scrapy.core.engine] INFO: Closing spider (finished)\n2024-05-29 18:01:55 [scrapy.statscollectors] INFO: Dumping Scrapy stats:\n{'downloader/request_bytes': 305,\n 'downloader/request_count': 1,\n 'downloader/request_method_count/GET': 1,\n 'downloader/response_bytes': 203997,\n 'downloader/response_count': 1,\n 'downloader/response_status_count/200': 1,\n 'elapsed_time_seconds': 0.404725,\n 'finish_reason': 'finished',\n 'finish_time': datetime.datetime(2024, 5, 29, 10, 1, 55, 90930, tzinfo=datetime.timezone.utc),\n 'httpcompression/response_bytes': 330414,\n 'httpcompression/response_count': 1,\n 'log_count/DEBUG': 4,\n 'log_count/ERROR': 1,\n 'log_count/INFO': 10,\n 'response_received_count': 1,\n 'scheduler/dequeued': 1,\n 'scheduler/dequeued/memory': 1,\n 'scheduler/enqueued': 1,\n 'scheduler/enqueued/memory': 1,\n 'spider_exceptions/NameError': 1,\n 'start_time': datetime.datetime(2024, 5, 29, 10, 1, 54, 686205, tzinfo=datetime.timezone.utc)}\n2024-05-29 18:01:55 [scrapy.core.engine] INFO: Spider closed (finished)\n",
+    "first_log_time": "2024-05-29 18:01:53",
+    "latest_log_time": "2024-05-29 18:01:55",
+    "runtime": "0:00:02",
+    "first_log_timestamp": 1716976913,
+    "latest_log_timestamp": 1716976915,
+    "datas": [
+        [
+            "2024-05-29 18:01:54",
+            0,
+            0,
+            0,
+            0
+        ]
+    ],
+    "pages": 1,
+    "items": 0,
+    "latest_matches": {
+        "scrapy_version": "2.11.2",
+        "telnet_console": "127.0.0.1:6023",
+        "telnet_username": "",
+        "telnet_password": "2350ebab91abd2e8",
+        "resuming_crawl": "",
+        "latest_offsite": "",
+        "latest_duplicate": "",
+        "latest_crawl": "2024-05-29 18:01:54 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.runoob.com/> (referer: None)",
+        "latest_scrape": "",
+        "latest_item": "",
+        "latest_stat": "2024-05-29 18:01:54 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)"
+    },
+    "latest_crawl_timestamp": 1716976914,
+    "latest_scrape_timestamp": 0,
+    "log_categories": {
+        "critical_logs": {
+            "count": 0,
+            "details": []
+        },
+        "error_logs": {
+            "count": 1,
+            "details": [
+                "2024-05-29 18:01:55 [scrapy.core.scraper] ERROR: Spider error processing <GET https://www.runoob.com/> (referer: None)\r\nTraceback (most recent call last):\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\utils\\defer.py\", line 279, in iter_errback\r\n    yield next(it)\r\n          ^^^^^^^^\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\utils\\python.py\", line 350, in __next__\r\n    return next(self.data)\r\n           ^^^^^^^^^^^^^^^\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\utils\\python.py\", line 350, in __next__\r\n    return next(self.data)\r\n           ^^^^^^^^^^^^^^^\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\r\n    for r in iterable:\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\spidermiddlewares\\referer.py\", line 352, in <genexpr>\r\n    return (self._set_referer(r, response) for r in result or ())\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\r\n    for r in iterable:\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\spidermiddlewares\\urllength.py\", line 27, in <genexpr>\r\n    return (r for r in result or () if self._filter(r, spider))\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\r\n    for r in iterable:\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\spidermiddlewares\\depth.py\", line 31, in <genexpr>\r\n    return (r for r in result or () if self._filter(r, response, spider))\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"E:\\Python311\\Lib\\site-packages\\scrapy\\core\\spidermw.py\", line 106, in process_sync\r\n    for r in iterable:\r\n  File \"D:\\gitee\\py_tool\\03 scarpy_test\\scrapy_frist\\scrapy_frist\\spiders\\myspider.py\", line 20, in parse\r\n    item['name'] = re.sub(matchs,'',name_t)\r\n                   ^^\r\nNameError: name 're' is not defined"
+            ]
+        },
+        "warning_logs": {
+            "count": 0,
+            "details": []
+        },
+        "redirect_logs": {
+            "count": 0,
+            "details": []
+        },
+        "retry_logs": {
+            "count": 0,
+            "details": []
+        },
+        "ignore_logs": {
+            "count": 0,
+            "details": []
+        }
+    },
+    "shutdown_reason": "N/A",
+    "finish_reason": "finished",
+    "crawler_stats": {
+        "source": "log",
+        "last_update_time": "2024-05-29 18:01:55",
+        "last_update_timestamp": 1716976915,
+        "downloader/request_bytes": 305,
+        "downloader/request_count": 1,
+        "downloader/request_method_count/GET": 1,
+        "downloader/response_bytes": 203997,
+        "downloader/response_count": 1,
+        "downloader/response_status_count/200": 1,
+        "elapsed_time_seconds": 0.404725,
+        "finish_reason": "finished",
+        "finish_time": "datetime.datetime(2024, 5, 29, 10, 1, 55, 90930, tzinfo=datetime.timezone.utc)",
+        "httpcompression/response_bytes": 330414,
+        "httpcompression/response_count": 1,
+        "log_count/DEBUG": 4,
+        "log_count/ERROR": 1,
+        "log_count/INFO": 10,
+        "response_received_count": 1,
+        "scheduler/dequeued": 1,
+        "scheduler/dequeued/memory": 1,
+        "scheduler/enqueued": 1,
+        "scheduler/enqueued/memory": 1,
+        "spider_exceptions/NameError": 1,
+        "start_time": "datetime.datetime(2024, 5, 29, 10, 1, 54, 686205, tzinfo=datetime.timezone.utc)"
+    },
+    "last_update_time": "2024-05-29 18:01:56",
+    "last_update_timestamp": 1716976916,
+    "logparser_version": "0.8.2",
+    "crawler_engine": {}
+}

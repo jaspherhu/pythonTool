@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#282a36">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#282A36">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<title>Sign In | Firecode.io</title>
+<meta name="description" content="Sign in to your Firecode.io account.">
+<title>Firecode.io</title>
+<meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="u8K8D36HNYYp3zbnCEeT1G8RJItwOpGAmX0fwngzema+HJiOhSGJlCHnQMMedrvtiSUVb4kmXjzrIPQXObE2sA==" />
+
+<link rel="stylesheet" media="screen" href="https://firecode.io/packs/css/application-cc1c72f4.css" />
+<script src="/packs/js/application-49d9821c7e73ad07cf36.js" type="d1c6b75df146d1e617d79b2d-text/javascript"></script>
+
+
+<script type="d1c6b75df146d1e617d79b2d-text/javascript">
+    !function() {
+      var analytics = window.analytics = window.analytics || [];
+      if (!analytics.initialize) if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice."); else {
+        analytics.invoked = !0;
+        analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on", "addSourceMiddleware", "addIntegrationMiddleware", "setAnonymousId", "addDestinationMiddleware"];
+        analytics.factory = function(e) {
+          return function() {
+            var t = Array.prototype.slice.call(arguments);
+            t.unshift(e);
+            analytics.push(t);
+            return analytics;
+          };
+        };
+        for (var e = 0; e < analytics.methods.length; e++) {
+          var key = analytics.methods[e];
+          analytics[key] = analytics.factory(key);
+        }
+        analytics.load = function(key, e) {
+          var t = document.createElement("script");
+          t.type = "text/javascript";
+          t.async = !0;
+          t.src = "https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";
+          var n = document.getElementsByTagName("script")[0];
+          n.parentNode.insertBefore(t, n);
+          analytics._loadOptions = e;
+        };
+        analytics._writeKey = "KoeYjHGkoJrnxYbywGl8yZ0JoHeoHQG8";
+        analytics.SNIPPET_VERSION = "4.13.2";
+      }
+    }();
+    analytics.load("KoeYjHGkoJrnxYbywGl8yZ0JoHeoHQG8");
+
+    // Middleware to augment event context
+    var SMW1 = function({ payload, next, integrations }) {
+      var properties = payload.obj && payload.obj.properties;
+      if (!payload.obj.context) {
+        payload.obj.context = {};
+      }
+      var traits = payload.obj.context.traits ? { ...payload.obj.context.traits } : {};
+      ["firstName", "lastName", "name", "email", "phone"].forEach(function(key) {
+        if (properties && properties[key]) {
+          traits[key] = properties[key];
+        }
+      });
+      if (properties && properties.address) {
+        traits.address = { ...traits.address };
+        ["street", "street2", "city", "state", "postal_code"].forEach(function(key) {
+          if (properties.address[key]) {
+            traits.address[key] = properties.address[key];
+          }
+        });
+      }
+      if (Object.keys(traits).length > 0) {
+        payload.obj.context.traits = traits;
+      }
+      if (properties && properties.campaign) {
+        payload.obj.context.campaign = { ...payload.obj.context.campaign, ...properties.campaign };
+      }
+      next(payload);
+    };
+    analytics.addSourceMiddleware(SMW1);
+  </script>
+
+
+
+</head>
+<body>
+<nav id="bind_component-header" class="navbar navbar-expand navbar-dark bg-dark">
+
+<a href="/">
+<span class="navbar-brand">
+<img alt="Firecode.io logo" title="Firecode.io" height="25" src="https://firecode.io/packs/media/images/brand/full_text/light/logo-4756ac7837411b0bae2e2dce96a089a8.webp" />
+<sup><small class="text-monospace text-muted font-italic"><span id="__version__">v3.0.0-beta</span></small></sup>
+</span>
+</a> 
+
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bind_component-header_collapse" aria-controls="bind_component-header_collapse" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+</button>
+
+
+<div class="collapse navbar-collapse header-navbar" id="bind_component-header_collapse">
+<ul class="navbar-nav my-auto mt-2 mt-lg-0 mr-auto"></ul> 
+<ul class="navbar-nav my-auto mt-2 mt-lg-0">
+
+<li class="nav-item">
+<a class="nav-link " href="/login/sign_in">
+Sign in
+</a> </li>
+
+</ul>
+
+
+
+
+
+</div>
+</nav>
+<script src="https://firecode.io/packs/js/shared/components/header-03da37d0cb175b2b2819.js" type="d1c6b75df146d1e617d79b2d-text/javascript"></script>
+<link rel="stylesheet" media="screen" href="https://firecode.io/packs/css/shared/components/header-b55fc502.css" />
+<div class="container">
+<h2 class="mt-3"><strong>Log in</strong></h2>
+<div class="alert alert-info my-4" role="alert">
+<i class="fas fa-mask"></i> Trying to log in with legacy credentials? Firecode.io V2 is currently
+in private beta with a select group of users. Click <a href="/pages/beta_invite">here</a> to request
+an access code if you don't have one.
+</div>
+<form class="new_user" id="new_user" action="/login/sigin" accept-charset="UTF-8" method="post"><input type="hidden" name="authenticity_token" value="C0TxcX1jSa5UTeIZclkS3e5BkGLaFCUPY6iU3aS8QpsfioZlEsSxM4FzedphaV8x9Ex/C26oKpBreAW+PUlrgA==" />
+<div class="field form-group">
+<strong><label for="user_email">Email</label></strong><br/>
+<input autofocus="autofocus" autocomplete="email" class="form-control" placeholder="email@example.com" type="email" value name="email" id="user_email" />
+</div>
+<div class="field form-group">
+<strong><label for="user">User</label></strong><br/>
+<input autofocus="autofocus" autocomplete="current-user" type="user" name="user"  id="user_name" />
+</div>
+<div class="field form-group">
+<strong><label for="user_password">Password</label></strong><br/>
+<input class="form-control" autocomplete="current-password" type="password" name="password" id="user_password" />
+</div>
+<div class="field form-group">
+<div class="form-check">
+<input name="remember_me" type="hidden" value="1" /><input class="form-check-input" type="checkbox" value="1" name="remember_me" id="user_remember_me" />
+<label class="form-check-label" for="user_remember_me">Remember me</label>
+</div>
+</div>
+<div class="form-group actions">
+<input type="submit" name="commit" value="Log in" class="btn btn-primary btn-block" data-disable-with="Log in" />
+</div>
+</form> <hr>
+<a href="/login/sign_up">Sign up</a><br/>
+<a href="/users/password/new">Forgot your password?</a><br/>
+
+
+</div>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="d1c6b75df146d1e617d79b2d-|49" defer></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vef91dfe02fce4ee0ad053f6de4f175db1715022073587" integrity="sha512-sDIX0kl85v1Cl5tu4WGLZCpH/dV9OHbA4YlKCuCiMmOQIk4buzoYDZSFj+TvC71mOBLh8CDC/REgE0GX0xcbjA==" data-cf-beacon='{"rayId":"88d70383d98acef5","version":"2024.4.1","token":"d2405995fc714682893733c40ad9efda"}' crossorigin="anonymous"></script>
+</body>
+</html>

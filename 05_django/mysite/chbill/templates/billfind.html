@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <!--<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="https://v3.bootcss.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+<!-- 
+    <script>
+        // 使用jQuery替换字符串
+        ("p").each(function() {
+          var text =(this).text();
+          var newText = text.replace("\r\n","<br/>");
+          $(this).text(newText);
+        });
+    </script>
+-->
+  </head>
+
+    
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://127.0.0.1:8000/login/sigin">MainPage</a>
+        </div>
+
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/blog">Home</a></li>
+            <li><a href="/chbill/find">SearchBill</a></li>
+            <li><a href="/main">About</a></li>
+            <li><a href="/blog">Contact</a></li>
+            <li><a href="/blog">About</a></li>
+            <li><a href="#feedback">feedback</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    
+          
+
+    <div class="container" style="margin-top: 50px;">
+<!-- 第二导航结束 -->
+<br>
+<!-- 搜索开始 -->
+<div class="container">
+    <form action="/chbill/find/?s=video/search/" method="post" name="search" id="search">
+        <input type="text" name="wd" id="wd" size="18">
+        <input type="submit" value="重新搜索">
+        <input type="hidden" name="__hash__" value="6fc5e1a1119c070760f56705e5e3179f">
+    </form>
+</div>
+<!-- 搜索结束 -->
+<br/>
+
+      <div class="starter-template">
+        <h2>搜索结果</h2>
+        {% for bil in bill_list %}
+            <p><a href="{{ bil.url }} ">{{ bil.id }}:{{ bil.name }}   [第{{bil.intruduction}}集]</a></p>
+            <p><a href="{{ bil.url }}">{{ bil.url }}</a></p>
+        {% endfor %}
+      </div>
+
+      <br>
+<p align="center">
+第 1/62 页 共 1477 条记录 <a href='?page=1'>首页</a> <a href='?page=1'>前一页</a> <a href='?page=2'>后一页</a> <a href='?page=62'>末页</a>　跳到<select name='topage' size='1' onchange='window.location="?page="+this.value'>
+<option value='1' selected>1</option>
+<option value='2'>2</option>
+<option value='3'>3</option>
+<option value='4'>4</option>
+<option value='5'>5</option>
+<option value='6'>6</option>
+<option value='7'>7</option>
+<option value='8'>8</option>
+<option value='9'>9</option>
+<option value='10'>10</option>
+<option value='11'>11</option>
+<option value='12'>12</option>
+<option value='13'>13</option>
+<option value='14'>14</option>
+<option value='15'>15</option>
+<option value='16'>16</option>
+<option value='17'>17</option>
+<option value='18'>18</option>
+<option value='19'>19</option>
+<option value='20'>20</option>
+<option value='21'>21</option>
+<option value='22'>22</option>
+<option value='23'>23</option>
+<option value='24'>24</option>
+<option value='25'>25</option>
+<option value='26'>26</option>
+<option value='27'>27</option>
+<option value='28'>28</option>
+<option value='29'>29</option>
+<option value='30'>30</option>
+<option value='31'>31</option>
+<option value='32'>32</option>
+<option value='33'>33</option>
+<option value='34'>34</option>
+<option value='35'>35</option>
+<option value='36'>36</option>
+<option value='37'>37</option>
+<option value='38'>38</option>
+<option value='39'>39</option>
+<option value='40'>40</option>
+<option value='41'>41</option>
+<option value='42'>42</option>
+<option value='43'>43</option>
+<option value='44'>44</option>
+<option value='45'>45</option>
+<option value='46'>46</option>
+<option value='47'>47</option>
+<option value='48'>48</option>
+<option value='49'>49</option>
+<option value='50'>50</option>
+<option value='51'>51</option>
+<option value='52'>52</option>
+<option value='53'>53</option>
+<option value='54'>54</option>
+<option value='55'>55</option>
+<option value='56'>56</option>
+<option value='57'>57</option>
+<option value='58'>58</option>
+<option value='59'>59</option>
+<option value='60'>60</option>
+<option value='61'>61</option>
+<option value='62'>62</option>
+</select>
+</p>
+</div>
+
+<br />
+    </div><!-- /.container <h2>bii_Id:{{ bil.id }}</h2> -->
+
+    <div class="container"  align="center" width="90%">
+      <hr width="100%" size=2 color=#3673B9>
+      <br>
+      我是胡帆,你找我什么事 - 这个网页我做的
+      <br>
+      <script src="/dfg/t_m.js" language="javascript"></script>
+      </div>          
+      <br />
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
