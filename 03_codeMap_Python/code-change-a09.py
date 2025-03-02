@@ -130,7 +130,7 @@ class Application(tk.Tk):
         
         # 深色系配色方案（提高可读性）
         self.style.configure("Primary.TButton", 
-                            foreground="red",
+                            foreground="green",
                             background="#2c3e50",  # 深蓝灰
                             font=('微软雅黑', 10, 'bold'))
         
@@ -140,7 +140,7 @@ class Application(tk.Tk):
                             font=('微软雅黑', 10, 'bold'))
         
         self.style.configure("Success.TButton",
-                            foreground="red",
+                            foreground="green",
                             background="#27ae60",  # 深绿色
                             font=('微软雅黑', 10, 'bold'))
         
@@ -793,7 +793,7 @@ class Application(tk.Tk):
         
         ttk.Button(
             kw_frame,
-            text="恢复关键词",
+            text="恢复关键词转换",
             command=self.start_keyword_restore,
             style="Warning.TButton"
         ).pack(fill=tk.X, pady=2, padx=5, ipady=3)  # 增加内边距
