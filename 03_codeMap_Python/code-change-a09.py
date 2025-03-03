@@ -21,8 +21,29 @@ import sys
 MAPPING_CONFIG_PATH = 'mapping_config.json'
 VERSION = "20250302"
 # 新增全局常量：关键字最小长度
-MIN_KEYWORD_LENGTH = 4
+MIN_KEYWORD_LENGTH = 5
 
+
+# 新增：C语言关键词列表
+C_KEYWORDS = {
+    'auto', 'break', 'case', 'char', 'const', 'continue', 'default', 'do',
+    'double', 'else', 'enum', 'extern', 'float', 'for', 'goto', 'if',
+    'inline', 'int', 'long', 'register', 'restrict', 'return', 'short',
+    'signed', 'sizeof', 'static', 'struct', 'switch', 'typedef', 'union',
+    'unsigned', 'void', 'volatile', 'while', '_Bool', '_Complex', '_Imaginary',
+    'memset', 'strcat', 'strcmp', 'strcpy', 'strlen', 'strncat', 'strncmp',
+    'strncpy', 'strstr', 'strtok', 'strtol', 'strtoul', 'strtod', 'strtof',
+    'strtold', 'strtoll', 'strtoull', 'strerror', 'strsignal', 'strcoll',
+    'strxfrm', 'memchr','memcmp', 'memcpy', 'memmove', 'memset', 'memccpy', 'uint16_t', 
+    'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 
+    'defined', '__func__', '__FILE__', '__LINE__', '__DATE__', '__TIME__', 'define', 
+    '__attribute__', '__builtin__', '__inline__', '__restrict__', '__signed__', '__volatile__', 
+    '__asm__', '__attribute__', '__builtin__', '__inline__', '__restrict__', '__signed__', '__volatile__', 
+    'control', 'break', 'case', 'char', 'const', 'continue', 'default', 'do',
+    'sprintf', 'printf', 'scanf', 'atoi', 'atof', 'atol', 'atoll', 'localtime', 'tm_mon', 'tm_mday', 
+    'tm_year', 'tm_hour', 'tm_min', 'tm_sec', 'mktime', 'localtime', 'malloc', 'free', 'calloc', 'realloc',
+    'osDelay' , 'va_start', 'va_end','vsnprintf', 'snprintf', 'vsnprintf', 'snprintf', 'vsnprintf', 'snprintf', 'vsnprintf', 'snprintf', 'vsnprintf', 'snprintf'
+}
 
 def get_script_dir():
     """获取脚本所在目录的绝对路径"""
@@ -196,20 +217,47 @@ class Application(tk.Tk):
         self.setup_logging()
 
     def extract_and_save_keywords(self):
-        """提取关键字并保存到CSV文件"""
+        """提取关键字并保存到CSV文件，同时提取引号内的字符串"""
         if not self._validate_directory():
             return
 
-        self.log_message("开始提取关键字...")
+        self.log_message("开始提取关键字和引号内容...")
         try:
-            # 通过实例调用静态方法
+            # 提取关键字
             keywords = self.extract_keywords_from_folder(self.selected_dir)
             keyword_csv_path = os.path.join(get_script_dir(), 'keywords_extracted.csv')
             self.save_keywords_to_csv(keywords, keyword_csv_path)
             
+            # 更新关键词映射表
             self.keywords.update({kw: "" for kw in keywords})
             self._refresh_keyword_list()
-            messagebox.showinfo("完成", f"共提取 {len(keywords)} 个关键字")
+            self.log_message(f"成功提取 {len(keywords)} 个关键字")
+
+            # 提取引号内容
+            quoted_strings = set()
+            for root, _, files in os.walk(self.selected_dir):
+                for file in files:
+                    # 检查文件扩展名是否符合过滤条件
+                    if any(file.endswith(ext) for ext in self.filter_extensions):
+                        file_path = os.path.join(root, file)
+                        self.log_message(f"正在处理文件：{file_path}")
+                        quoted_strings.update(self.extract_quoted_strings_from_file(file_path))
+                    else:
+                        self.log_message(f"跳过文件（不符合扩展名条件）：{file}")
+
+            # 保存引号内容
+            quoted_strings_file = os.path.join(get_script_dir(), 'quoted_strings_extracted.csv')
+            self.save_quoted_strings_to_file(quoted_strings, quoted_strings_file)
+
+            self.log_message(f"成功提取 {len(quoted_strings)} 个引号内的字符串")
+
+            # 显示完成消息
+            messagebox.showinfo(
+                "完成",
+                f"共提取 {len(keywords)} 个关键字，保存到 {keyword_csv_path}\n"
+                f"共提取 {len(quoted_strings)} 个引号内容，保存到 {quoted_strings_file}"
+            )
+
         except Exception as e:
             messagebox.showerror("错误", str(e))
 
@@ -1084,20 +1132,29 @@ class Application(tk.Tk):
     @staticmethod
     def extract_keywords_from_file(file_path):
         """从单个文件中提取关键字，并过滤长度小于等于 MIN_KEYWORD_LENGTH 的词"""
+        # 正则表达式：匹配函数名和变量名，排除引号内的内容和 /* ... */ 注释块
         keyword_pattern = re.compile(
-            r'\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?=\s*[\(;:])'  # 匹配函数名和变量名
+            r'(?<!["\'])\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?=\s*[\(;:])(?!["\'])'
         )
+        block_comment_pattern = re.compile(r'/\*.*?\*/', re.DOTALL)  # 匹配 /* ... */
+
         keywords = set()
         try:
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
+
+                # 移除 /* ... */ 注释块
+                content = block_comment_pattern.sub('', content)
+
+                # 提取关键字
                 matches = keyword_pattern.findall(content)
-                # 使用全局常量过滤长度大于 MIN_KEYWORD_LENGTH 的关键字
-                keywords.update(match for match in matches if len(match) > MIN_KEYWORD_LENGTH)
+                keywords.update(
+                    match for match in matches 
+                    if len(match) > MIN_KEYWORD_LENGTH and match not in C_KEYWORDS
+                )
         except Exception as e:
             print(f"无法读取文件 {file_path}：{str(e)}")
         return keywords
-
 
     @staticmethod
     def extract_keywords_from_folder(folder_path):
@@ -1126,6 +1183,64 @@ class Application(tk.Tk):
         except Exception as e:
             raise RuntimeError(f"保存失败：{str(e)}")
 
+    @staticmethod
+    def extract_quoted_strings_from_file(file_path):
+        """从单个文件中提取引号内的字符串"""
+        # 正则表达式匹配双引号内的内容
+        quoted_pattern = re.compile(r'"([^"]*)"')  # 匹配"xxx"中的内容
+        quoted_strings = set()
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+                matches = quoted_pattern.findall(content)
+                # 添加所有匹配的引号内容到集合中
+                quoted_strings.update(matches)
+        except Exception as e:
+            print(f"无法读取文件 {file_path}：{str(e)}")
+        return quoted_strings
+
+
+    @staticmethod
+    def save_quoted_strings_to_file(quoted_strings, output_file):
+        """将引号内的字符串保存到文件"""
+        try:
+            with open(output_file, 'w', encoding='utf-8') as f:
+                for string in sorted(quoted_strings):
+                    f.write(f'"{string}"\n')  # 每行保存一个引号内容，保留引号
+        except Exception as e:
+            raise RuntimeError(f"保存失败：{str(e)}")
+
+
+    def extract_and_save_quoted_strings(self):
+        """提取引号内的字符串并保存到文件"""
+        if not self._validate_directory():
+            return
+
+        self.log_message("开始提取引号内的字符串...")
+        try:
+            # 调用静态方法提取所有引号内的字符串
+            quoted_strings = set()
+            for root, _, files in os.walk(self.selected_dir):
+                for file in files:
+                    # 检查文件扩展名是否符合过滤条件
+                    if any(file.endswith(ext) for ext in self.filter_extensions):
+                        file_path = os.path.join(root, file)
+                        self.log_message(f"正在处理文件：{file_path}")
+                        quoted_strings.update(self.extract_quoted_strings_from_file(file_path))
+                    else:
+                        self.log_message(f"跳过文件（不符合扩展名条件）：{file}")
+
+            # 保存提取结果到文件
+            quoted_strings_file = os.path.join(get_script_dir(), 'quoted_strings_extracted.txt')
+            self.save_quoted_strings_to_file(quoted_strings, quoted_strings_file)
+
+            self.log_message(f"成功提取 {len(quoted_strings)} 个引号内的字符串")
+            messagebox.showinfo(
+                "完成",
+                f"共提取 {len(quoted_strings)} 个引号内的字符串，已保存到 {quoted_strings_file}"
+            )
+        except Exception as e:
+            messagebox.showerror("错误", str(e))
 
 if __name__ == "__main__":
     app = Application()
