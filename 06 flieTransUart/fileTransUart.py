@@ -313,16 +313,16 @@ class SerialTool:
                 continue
 
             frame_type = buffer[2]
-            length = struct.unpack('<H', buffer[3:5])[0]
+            length = struct.unpack('<H', buffer[3:5])[0]    
 
             if length > 0:
                 if len(buffer) < 8 + length:
-                    self.file_transfer_data = buffer
+                    self.file_transfer_data = buffer    # 缓存未完整帧
                     break
             else:
                 self.file_transfer_data = b""
 
-            frame_data = buffer[5:5+length]
+            frame_data = buffer[5:5 + length]
             crc_received = struct.unpack('<H', buffer[5+length:5+length+2])[0]
             crc_calculated = self.calculate_crc(buffer[:5+length])  # 使用新的CRC计算函数
 
@@ -334,11 +334,10 @@ class SerialTool:
             if time.time() - self.file_transfer_start_time > 30 & frame_type > FRAME_TYPE_HAND:
                 self.update_history("错误", "接收方确认失败")
                 self.file_transfer_file.close()
-                
+
             if frame_type == FRAME_TYPE_HAND:
                 if self.receive_file_var.get():
                     self.send_ack(FRAME_TYPE_ACK_02)
-                    
                     self.file_transfer_start_time = time.time()
             elif frame_type == FRAME_TYPE_ACK_02:
                 self.rcv_ack02 = 1
