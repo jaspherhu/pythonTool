@@ -25,6 +25,8 @@ FRAME_TYPE_ACK_04 = 0x04
 FRAME_TYPE_ACK_06 = 0x06
 FRAME_TYPE_ACK_08 = 0x08
 
+DATA_FRAME_LENGTH = 512
+
 class SerialTool:
     def __init__(self, root):
         self.root = root
@@ -61,57 +63,93 @@ class SerialTool:
     def create_menu(self):
         menubar = tk.Menu(self.root)
         file_menu = tk.Menu(menubar, tearoff=0)
-        file_menu.add_command(label="设置文件目录", command=self.set_default_directory)
-        menubar.add_cascade(label="文件", menu=file_menu)
+        file_menu.add_command(label="默认接收文件路径", command=self.set_default_directory)
+        file_menu.add_command(label="版本信息", )
+        file_menu.add_command(label="系统帮助", )
+        menubar.add_cascade(label="系统设置", menu=file_menu)
         self.root.config(menu=menubar)
-
     def create_widgets(self):
+        
+
         # 串口配置区域
-        config_frame = tk.LabelFrame(self.root, text="串口配置")
+        config_frame = tk.LabelFrame(self.root, text="端口选择")
         config_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
 
+        # 端口
         tk.Label(config_frame, text="端口:").grid(row=0, column=0, padx=5, pady=2, sticky="w")
         self.port_combobox = ttk.Combobox(config_frame, textvariable=self.port_var, state="readonly", width=20, font=('Helvetica', 10))
         self.port_combobox.grid(row=0, column=1, padx=5, pady=2, sticky="ew")
 
+        # 打开串口和关闭串口按钮
+        tk.Button(config_frame, text="打开串口", command=self.toggle_serial, fg="green").grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        tk.Button(config_frame, text="关闭串口", command=self.close_serial, fg="red").grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+
+        # 调用 refresh_ports 方法以加载端口列表
+        self.refresh_ports()
+
+        # 串口配置区域
+        config_frame = tk.LabelFrame(self.root, text="串口配置")
+        config_frame.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
+
+        # 波特率
         tk.Label(config_frame, text="波特率:").grid(row=1, column=0, padx=5, pady=2, sticky="w")
-        tk.Entry(config_frame, textvariable=self.baudrate_var, width=20).grid(row=1, column=1, padx=5, pady=2, sticky="ew")
+        self.baudrate_combobox = ttk.Combobox(config_frame, textvariable=self.baudrate_var, state="readonly", width=10)
+        self.baudrate_combobox["values"] = ("9600", "115200", "57600", "38400", "19200", "4800")  # 提供波特率选项
+        self.baudrate_combobox.grid(row=1, column=1, padx=5, pady=2, sticky="ew")
 
+        # 数据位
         tk.Label(config_frame, text="数据位:").grid(row=2, column=0, padx=5, pady=2, sticky="w")
-        tk.Entry(config_frame, textvariable=self.databits_var, width=20).grid(row=2, column=1, padx=5, pady=2, sticky="ew")
+        self.databits_combobox = ttk.Combobox(config_frame, textvariable=self.databits_var, state="readonly", width=10)
+        self.databits_combobox["values"] = ("5", "6", "7", "8")  # 提供数据位选项
+        self.databits_combobox.grid(row=2, column=1, padx=5, pady=2, sticky="ew")
 
+        # 停止位
         tk.Label(config_frame, text="停止位:").grid(row=3, column=0, padx=5, pady=2, sticky="w")
-        tk.Entry(config_frame, textvariable=self.stopbits_var, width=20).grid(row=3, column=1, padx=5, pady=2, sticky="ew")
+        self.stopbits_combobox = ttk.Combobox(config_frame, textvariable=self.stopbits_var, state="readonly", width=10)
+        self.stopbits_combobox["values"] = ("1", "1.5", "2")  # 提供停止位选项
+        self.stopbits_combobox.grid(row=3, column=1, padx=5, pady=2, sticky="ew")
 
+        # 校验位
         tk.Label(config_frame, text="校验位:").grid(row=4, column=0, padx=5, pady=2, sticky="w")
-        tk.Entry(config_frame, textvariable=self.parity_var, width=20).grid(row=4, column=1, padx=5, pady=2, sticky="ew")
+        self.parity_combobox = ttk.Combobox(config_frame, textvariable=self.parity_var, state="readonly", width=10)
+        self.parity_combobox["values"] = ("N", "E", "O", "M", "S")  # 提供校验位选项
+        self.parity_combobox.grid(row=4, column=1, padx=5, pady=2, sticky="ew")
 
-        tk.Button(config_frame, text="打开串口", command=self.toggle_serial).grid(row=5, column=0, padx=5, pady=5, sticky="ew")
-        tk.Button(config_frame, text="关闭串口", command=self.close_serial).grid(row=5, column=1, padx=5, pady=5, sticky="ew")
+        self.receive_file_var = tk.BooleanVar(value=False)
+        tk.Checkbutton(config_frame, text="允许接收文件", variable=self.receive_file_var).grid(row=5, column=0, padx=5, pady=2, sticky="w")
+        tk.Button(config_frame, text="选择发送文件", command=self.send_file, fg="black").grid(row=5, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
+
+
 
         # 数据发送区域
         send_frame = tk.LabelFrame(self.root, text="数据发送")
-        send_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        send_frame.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
 
         self.send_data_var = tk.StringVar()
-        tk.Entry(send_frame, textvariable=self.send_data_var, width=40).grid(row=0, column=0, padx=5, pady=2, sticky="ew")
-        tk.Button(send_frame, text="发送", command=self.send_data).grid(row=0, column=1, padx=5, pady=2, sticky="ew")
+        tk.Button(send_frame, text="发送", command=self.send_data, fg="blue").grid(row=1, column=0, padx=5, pady=2, sticky="ew")
+        tk.Entry(send_frame, textvariable=self.send_data_var, width=70).grid(row=1, column=1, padx=5, pady=2, sticky="ew")
+        
 
-        tk.Button(send_frame, text="文件发送", command=self.send_file).grid(row=1, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
         # 数据接收区域
         receive_frame = tk.LabelFrame(self.root, text="数据接收")
-        receive_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+        receive_frame.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
 
-        self.receive_text = scrolledtext.ScrolledText(receive_frame, width=60, height=10, state="disabled")
+        self.receive_text = scrolledtext.ScrolledText(receive_frame, width=80, height=12, state="disabled")
         self.receive_text.grid(row=0, column=0, padx=5, pady=2, sticky="ew")
 
-        self.receive_file_var = tk.BooleanVar(value=False)
-        tk.Checkbutton(receive_frame, text="允许接收文件", variable=self.receive_file_var).grid(row=1, column=0, padx=5, pady=2, sticky="w")
+        
+        # 用户调试信息
+        usr_info = tk.LabelFrame(self.root, text="用户调试")
+        usr_info.grid(row=2, column=0, padx=10, pady=10, sticky="nsew") 
+
+        self.usr_info = scrolledtext.ScrolledText(usr_info, width=40, height=10, state="disabled")
+        self.usr_info.grid(row=0, column=0, padx=5, pady=2, sticky="nsew") 
+        # tk.Entry(usr_info, textvariable=self.send_data_var, width=40).grid(row=0, column=0, padx=5, pady=2, sticky="ew")
 
         # 历史记录区域
         history_frame = tk.LabelFrame(self.root, text="历史记录")
-        history_frame.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")  # 添加 nsew 以支持扩展
+        history_frame.grid(row=2, column=1, padx=10, pady=10, sticky="nsew")  # 添加 nsew 以支持扩展
 
         self.history_text = scrolledtext.ScrolledText(history_frame, width=80, height=10, state="disabled")  # 增加宽度
         self.history_text.grid(row=0, column=0, padx=5, pady=2, sticky="nsew")  # 添加 nsew 以支持扩展
@@ -229,7 +267,7 @@ class SerialTool:
 
         # 发送文件数据帧
         f_nums_bak = -1
-        chunk_size = 1024  # 每帧发送1024字节
+        chunk_size = DATA_FRAME_LENGTH  # 每帧发送1024字节
         total_chunks = (file_size + chunk_size - 1) // chunk_size
 
         # for i in range(total_chunks):
@@ -246,7 +284,7 @@ class SerialTool:
             frame = self.create_frame(FRAME_TYPE_DATA, frame_data)
             self.serial_port.write(frame)
             self.update_history(f"发送文件数据帧 {i+1}/{total_chunks}", f"{len(chunk)} bytes")
-            # time.sleep(0.01)
+            time.sleep(0.01)
 
             # 每5s检测一次06报文收到了没--如果很久没有收到从机回复报文-暂停发送了
             if time.time() - start_time > 5:
@@ -352,7 +390,6 @@ class SerialTool:
                         if self.file_transfer_size > 0:
                             self.update_history("文件信息异常-长度为0", f"文件名: {file_name}, 格式: {file_format}, 大小: {file_size} bytes 数据: {frame_data}")
                             return
-                        
                         self.file_transfer_size = file_size
                         self.file_transfer_received_size = 0
                         self.file_transfer_crc = 0
@@ -386,9 +423,7 @@ class SerialTool:
                 if self.file_transfer_received_size >= self.file_transfer_size:
                     self.file_transfer_file.write(self.file_transfer_data)
                     self.file_transfer_file.close()
-
                     self.send_ack(FRAME_TYPE_ACK_06)
-
                     self.update_history("接收文件数据帧", f"接收大小: {self.file_transfer_received_size} bytes, CRC: {self.file_transfer_crc}")
                     self.save_received_file()
                     self.file_transfer_state = None
@@ -490,6 +525,13 @@ class SerialTool:
         self.history_text.config(state="normal")
         self.history_text.insert(tk.END, log)  # 添加插入位置和日志内容
         self.history_text.config(state="disabled")  # 插入后将状态重新设置为disabled
+
+    def update_usrinfo(self, action, data):
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log = f"[{timestamp}] {action}: {data}\n"
+        self.usr_info.config(state="normal")
+        self.historyusr_info_text.insert(tk.END, log)  # 添加插入位置和日志内容
+        self.usr_info.config(state="disabled")  # 插入后将状态重新设置为disabled
 
 if __name__ == "__main__":
     root = tk.Tk()
