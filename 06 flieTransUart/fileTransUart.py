@@ -25,7 +25,7 @@ FRAME_TYPE_ACK_04 = 0x04
 FRAME_TYPE_ACK_06 = 0x06
 FRAME_TYPE_ACK_08 = 0x08
 
-DATA_FRAME_LENGTH = 512
+DATA_FRAME_LENGTH = 128
 
 class SerialTool:
     def __init__(self, root):
@@ -58,7 +58,7 @@ class SerialTool:
         self.file_transfer_timeout = 1000  # 1000 ms
         self.file_transfer_file_path = ""
         self.file_transfer_file = None
-        self.chunk_size = 1024  # 定义 chunk_size
+        self.chunk_size = DATA_FRAME_LENGTH  # 定义 chunk_size
 
     def create_menu(self):
         menubar = tk.Menu(self.root)
@@ -84,40 +84,37 @@ class SerialTool:
         tk.Button(config_frame, text="打开串口", command=self.toggle_serial, fg="green").grid(row=1, column=1, padx=5, pady=5, sticky="ew")
         tk.Button(config_frame, text="关闭串口", command=self.close_serial, fg="red").grid(row=1, column=0, padx=5, pady=5, sticky="ew")
 
-        # 调用 refresh_ports 方法以加载端口列表
-        self.refresh_ports()
-
         # 串口配置区域
-        config_frame = tk.LabelFrame(self.root, text="串口配置")
-        config_frame.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
+        setting_frame = tk.LabelFrame(self.root, text="串口配置")
+        setting_frame.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
 
         # 波特率
-        tk.Label(config_frame, text="波特率:").grid(row=1, column=0, padx=5, pady=2, sticky="w")
-        self.baudrate_combobox = ttk.Combobox(config_frame, textvariable=self.baudrate_var, state="readonly", width=10)
+        tk.Label(setting_frame, text="波特率:").grid(row=1, column=0, padx=5, pady=2, sticky="w")
+        self.baudrate_combobox = ttk.Combobox(setting_frame, textvariable=self.baudrate_var, state="readonly", width=10)
         self.baudrate_combobox["values"] = ("9600", "115200", "57600", "38400", "19200", "4800")  # 提供波特率选项
         self.baudrate_combobox.grid(row=1, column=1, padx=5, pady=2, sticky="ew")
 
         # 数据位
-        tk.Label(config_frame, text="数据位:").grid(row=2, column=0, padx=5, pady=2, sticky="w")
-        self.databits_combobox = ttk.Combobox(config_frame, textvariable=self.databits_var, state="readonly", width=10)
+        tk.Label(setting_frame, text="数据位:").grid(row=2, column=0, padx=5, pady=2, sticky="w")
+        self.databits_combobox = ttk.Combobox(setting_frame, textvariable=self.databits_var, state="readonly", width=10)
         self.databits_combobox["values"] = ("5", "6", "7", "8")  # 提供数据位选项
         self.databits_combobox.grid(row=2, column=1, padx=5, pady=2, sticky="ew")
 
         # 停止位
-        tk.Label(config_frame, text="停止位:").grid(row=3, column=0, padx=5, pady=2, sticky="w")
-        self.stopbits_combobox = ttk.Combobox(config_frame, textvariable=self.stopbits_var, state="readonly", width=10)
+        tk.Label(setting_frame, text="停止位:").grid(row=3, column=0, padx=5, pady=2, sticky="w")
+        self.stopbits_combobox = ttk.Combobox(setting_frame, textvariable=self.stopbits_var, state="readonly", width=10)
         self.stopbits_combobox["values"] = ("1", "1.5", "2")  # 提供停止位选项
         self.stopbits_combobox.grid(row=3, column=1, padx=5, pady=2, sticky="ew")
 
         # 校验位
-        tk.Label(config_frame, text="校验位:").grid(row=4, column=0, padx=5, pady=2, sticky="w")
-        self.parity_combobox = ttk.Combobox(config_frame, textvariable=self.parity_var, state="readonly", width=10)
+        tk.Label(setting_frame, text="校验位:").grid(row=4, column=0, padx=5, pady=2, sticky="w")
+        self.parity_combobox = ttk.Combobox(setting_frame, textvariable=self.parity_var, state="readonly", width=10)
         self.parity_combobox["values"] = ("N", "E", "O", "M", "S")  # 提供校验位选项
         self.parity_combobox.grid(row=4, column=1, padx=5, pady=2, sticky="ew")
 
         self.receive_file_var = tk.BooleanVar(value=False)
-        tk.Checkbutton(config_frame, text="允许接收文件", variable=self.receive_file_var).grid(row=5, column=0, padx=5, pady=2, sticky="w")
-        tk.Button(config_frame, text="选择发送文件", command=self.send_file, fg="black").grid(row=5, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
+        tk.Checkbutton(setting_frame, text="允许接收文件", variable=self.receive_file_var).grid(row=5, column=0, padx=5, pady=2, sticky="w")
+        tk.Button(setting_frame, text="选择发送文件", command=self.send_file, fg="black").grid(row=5, column=1, columnspan=2, padx=5, pady=5, sticky="ew")
 
 
 
@@ -157,6 +154,11 @@ class SerialTool:
         # 设置列权重
         self.root.grid_columnconfigure(0, weight=1)  # 主窗口列权重
         history_frame.grid_columnconfigure(0, weight=1)  # 历史记录区域列权重
+
+        # 调用 refresh_ports 方法以加载端口列表
+        self.refresh_ports()
+
+
 
     def refresh_ports(self):
         ports = [f"{port.device} - {port.description}" for port in serial.tools.list_ports.comports()]
@@ -199,9 +201,12 @@ class SerialTool:
 
     def send_data(self):
         if self.is_open:
-            data = self.send_data_var.get().encode()
-            self.serial_port.write(data)
-            self.update_history("发送", data.decode())
+            data = self.send_data_var.get().encode()  # 将 StringVar 转换为字节类型
+            self.serial_write_fucction(data)
+
+            # timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 获取当前时间并格式化
+            # formatted_data = f"[{timestamp}] 发送: {data.hex()}\n"  # 格式化发送的数据为十六进制
+            # self.update_frame_log("发送", formatted_data)
         else:
             messagebox.showwarning("警告", "请先打开串口")  # 显示请先打开串口的警告消息框
 
@@ -226,7 +231,8 @@ class SerialTool:
 
         # 发送帧类型为 0x01 的帧
         frame = self.create_frame(0x01, b'\xaa')
-        self.serial_port.write(frame)
+        # self.serial_port.write(frame)
+        self.serial_write_fucction(frame)
         self.file_transfer_state = None #
         self.update_history("发送帧类型 0x01", "")
 
@@ -237,7 +243,8 @@ class SerialTool:
                 break
             
             time.sleep(0.1)
-            self.serial_port.write(frame)
+            # self.serial_port.write(frame)
+            self.serial_write_fucction(frame)
         else:
             # messagebox.showerror("错误", "握手01超时")
             self.update_history("错误", "握手01超时")
@@ -249,7 +256,7 @@ class SerialTool:
         file_size = len(file_data)
         file_info = file_name.ljust(32, '\0').encode('utf-8') + file_format.ljust(32, '\0').encode('utf-8') + struct.pack('<I', file_size)
         frame = self.create_frame(FRAME_TYPE_INFO, file_info)
-        self.serial_port.write(frame)
+        self.serial_write_fucction(frame)
         self.update_history("发送文件信息帧", f"文件名: {file_name}, 格式: {file_format}, 大小: {file_size} bytes")
 
         # 等待确认帧 0x04
@@ -259,7 +266,8 @@ class SerialTool:
                 break
 
             time.sleep(0.1)
-            self.serial_port.write(frame)
+            # self.serial_port.write(frame)
+            self.serial_write_fucction(frame)
         else:
             # messagebox.showerror("错误", "发送文件信息帧超时")
             self.update_history("错误", "发送文件信息帧超时")
@@ -282,9 +290,9 @@ class SerialTool:
             chunk = file_data[i * chunk_size:(i + 1) * chunk_size]
             frame_data = struct.pack('<I', i) + chunk  # 当前帧号 + 文件数据
             frame = self.create_frame(FRAME_TYPE_DATA, frame_data)
-            self.serial_port.write(frame)
-            self.update_history(f"发送文件数据帧 {i+1}/{total_chunks}", f"{len(chunk)} bytes")
-            time.sleep(0.01)
+            self.serial_write_fucction(frame)
+            self.update_history(f"发送文件数据帧 {i}/{total_chunks}", f"{len(chunk)} bytes")
+            time.sleep(0.1)
 
             # 每5s检测一次06报文收到了没--如果很久没有收到从机回复报文-暂停发送了
             if time.time() - start_time > 5:
@@ -297,7 +305,8 @@ class SerialTool:
         # 发送结束帧
         file_crc = zlib.crc32(file_data) & 0xFFFF  # 使用 zlib 库计算 CRC16
         frame = self.create_frame(FRAME_TYPE_END, struct.pack('<H', file_crc))
-        self.serial_port.write(frame)
+        # self.serial_port.write(frame)
+        self.serial_write_fucction(frame)
         self.update_history("发送文件结束帧", f"CRC: {file_crc}")
 
         # 等待确认帧 0x08
@@ -307,7 +316,8 @@ class SerialTool:
                 break
 
             time.sleep(0.1)
-            self.serial_port.write(frame)
+            # self.serial_port.write(frame)
+            self.serial_write_fucction(frame)
         else:
             # messagebox.showerror("错误", "发送文件结束帧超时")
             self.update_history("错误", "发送文件结束帧超时")
@@ -320,7 +330,7 @@ class SerialTool:
             if self.serial_port.in_waiting > 0:
                 data = self.serial_port.read(self.serial_port.in_waiting)
                 self.process_data(data)
-                self.update_receive(data)
+                self.update_frame_log("接收", data)
             time.sleep(0.1)
 
     def calculate_crc(self, data):
@@ -368,15 +378,19 @@ class SerialTool:
                 self.update_history("CRC 校验失败", f"接收到的 CRC: {crc_received}, 计算的 CRC: {crc_calculated}")
                 buffer = buffer[1:]  # 移除无效帧
                 continue
+            else:
+                self.file_transfer_start_time = time.time()
 
             if time.time() - self.file_transfer_start_time > 30 & frame_type > FRAME_TYPE_HAND:
                 self.update_history("错误", "接收方确认失败")
-                self.file_transfer_file.close()
-
+                # if self.file_transfer_file:
+                    # self.file_transfer_file.close()
+        
             if frame_type == FRAME_TYPE_HAND:
                 if self.receive_file_var.get():
-                    self.send_ack(FRAME_TYPE_ACK_02)
-                    self.file_transfer_start_time = time.time()
+                    self.send_ack(FRAME_TYPE_ACK_02, b"")
+                else:
+                    self.update_history(f"用户不允许接收文件...", "")
             elif frame_type == FRAME_TYPE_ACK_02:
                 self.rcv_ack02 = 1
                 self.file_transfer_state = FRAME_TYPE_ACK_02
@@ -387,18 +401,21 @@ class SerialTool:
                         file_name = frame_data[:32].rstrip(b'\0').decode('utf-8', errors='ignore')  # 修改：添加 errors='ignore'
                         file_format = frame_data[32:64].rstrip(b'\0').decode('utf-8', errors='ignore')  # 修改：添加 errors='ignore'
                         file_size = struct.unpack('<I', frame_data[64:68])[0]
-                        if self.file_transfer_size > 0:
-                            self.update_history("文件信息异常-长度为0", f"文件名: {file_name}, 格式: {file_format}, 大小: {file_size} bytes 数据: {frame_data}")
-                            return
                         self.file_transfer_size = file_size
+
+                        if self.file_transfer_size == 0:
+                            self.update_history("0x03帧异常-长度为0", f"文件名: {file_name}, 格式: {file_format}, 大小: {file_size} bytes 数据: {frame_data}")
+                            return
+
                         self.file_transfer_received_size = 0
                         self.file_transfer_crc = 0
-                        self.file_transfer_start_time = time.time()
                         self.file_transfer_file_path = os.path.join(self.default_directory, file_name)
                         self.file_transfer_file = open(self.file_transfer_file_path, "wb")
-                        self.send_ack(FRAME_TYPE_ACK_04)
+                        self.send_ack(FRAME_TYPE_ACK_04, b"")
                         self.update_history("接收文件信息帧", f"文件名: {file_name}, 格式: {file_format}, 大小: {file_size} bytes")
                         self.file_transfer_state = FRAME_TYPE_ACK_04  # 新增赋值
+                        # 初始化 file_transfer_data 为全零字节数组
+                        self.file_transfer_data = b'\x00' * 4096
                     except Exception as e:
                         self.update_history("错误", f"处理文件信息帧失败: {e}")
                         buffer = buffer[1:]  # 移除无效帧
@@ -407,41 +424,72 @@ class SerialTool:
                 self.rcv_ack04 = 1
                 self.file_transfer_state = FRAME_TYPE_ACK_04
             elif frame_type == FRAME_TYPE_DATA:
+                # 收到的是第n帧
                 self.frame_number = struct.unpack('<I', frame_data[:4])[0]
+                # 把数据取出来
                 chunk = frame_data[4:]
-                self.file_transfer_data += chunk
-                self.file_transfer_received_size += len(chunk)
-                self.file_transfer_crc = zlib.crc32(self.file_transfer_data) & 0xFFFF  # 使用 zlib 库计算 CRC16
-                self.file_transfer_start_time = time.time()
 
-                # 发送确认帧 0x06--告诉主机我接收到了frame_number这一帧,不要乱发
-                progress_percent = int((self.file_transfer_received_size / self.file_transfer_size) * 100)
+                # 将数据存放在 file_transfer_data 中的第 frame_number 块区域[0,32)
+                start_index = ((self.frame_number - 1) * DATA_FRAME_LENGTH) % 4096
+                end_index = start_index + len(chunk)
+
+                # 最后一帧确实不满足
+                if len(chunk) != DATA_FRAME_LENGTH and (self.file_transfer_size - self.file_transfer_received_size) > DATA_FRAME_LENGTH:
+                    self.frame_number = self.frame_number
+                else:
+                    # 确保不超出 4096 字节的限制
+                    if end_index > 4096:
+                        end_index = 4096
+                        chunk = chunk[:4096 - start_index]
+
+                # 将 chunk 数据存放在 file_transfer_data 中的正确位置
+                self.file_transfer_data = self.file_transfer_data[:start_index] + chunk + self.file_transfer_data[end_index:]
+
+                # 已经完成了多少字节传输
+                self.file_transfer_received_size = min(self.frame_number * DATA_FRAME_LENGTH, self.file_transfer_size)
+
+                if self.file_transfer_size != 0:
+                    # 发送确认帧 0x06--告诉主机我接收到了frame_number这一帧,不要乱发
+                    progress_percent = int((self.file_transfer_received_size / self.file_transfer_size) * 100)
+                else:
+                    progress_percent = 0
+
+                # 最后一帧没有赋值
                 ack_data = struct.pack('<I', self.frame_number) + struct.pack('<H', progress_percent)
-                self.send_ack_with_data(FRAME_TYPE_ACK_06, ack_data)
-                self.update_history(f"接收文件数据帧 {self.frame_number+1}/{(self.file_transfer_size + self.chunk_size - 1) // self.chunk_size}", f"{len(chunk)} bytes, 进度: {progress_percent}%")
+                self.send_ack(FRAME_TYPE_ACK_06, ack_data)
+                self.update_history(f"接收文件数据帧 {self.frame_number}/{(self.file_transfer_size + self.chunk_size - 1) // self.chunk_size}", f"{len(chunk)} / {self.file_transfer_received_size} bytes, 进度: {progress_percent}%")
+
+                # 检查是否需要写入文件
+                if end_index >= 4096:
+                    if self.file_transfer_file and not self.file_transfer_file.closed:
+                        self.file_transfer_file.write(self.file_transfer_data)
+                        self.file_transfer_data = b'\x00' * 4096
 
                 if self.file_transfer_received_size >= self.file_transfer_size:
-                    self.file_transfer_file.write(self.file_transfer_data)
-                    self.file_transfer_file.close()
-                    self.send_ack(FRAME_TYPE_ACK_06)
-                    self.update_history("接收文件数据帧", f"接收大小: {self.file_transfer_received_size} bytes, CRC: {self.file_transfer_crc}")
-                    self.save_received_file()
-                    self.file_transfer_state = None
+                    if self.file_transfer_file and not self.file_transfer_file.closed:
+                        # 确保所有数据都被写入文件
+                        self.file_transfer_file.write(self.file_transfer_data)
+                        self.file_transfer_file.close()
+                        self.file_transfer_file = None  # 文件已关闭，设置为 None
+                        self.update_history("接收文件数据帧", f"接收大小: {self.file_transfer_received_size} bytes, CRC: {self.file_transfer_crc}")
+                        self.save_received_file()
+                        self.file_transfer_state = None
 
             elif frame_type == FRAME_TYPE_ACK_06:
                 self.rcv_ack06 = 1
                 self.file_transfer_state = FRAME_TYPE_ACK_06 
-                self.update_history("接收确认帧 0x06", "")
+                # 更新从机接收进度
+                self.frame_number = struct.unpack('<I', frame_data[:4])[0]
+                self.update_history("接收确认帧", f"0x06:{self.frame_number}")
+
             elif frame_type == FRAME_TYPE_END:
                 received_crc = struct.unpack('<H', frame_data)[0]
                 if received_crc == self.file_transfer_crc:
                     self.update_history("接收文件结束帧", f"CRC 匹配: {received_crc}")
-                    # messagebox.showinfo("提示", "文件接收成功")
-                    self.send_ack(FRAME_TYPE_ACK_08)
+                    self.send_ack(FRAME_TYPE_ACK_08, b"")
                     self.file_transfer_state = FRAME_TYPE_ACK_08  # 新增赋值
                 else:
                     self.update_history("接收文件结束帧", f"CRC 不匹配: {received_crc} != {self.file_transfer_crc}")
-                    # messagebox.showerror("错误", "文件接收失败，CRC 不匹配")
                     self.update_history("错误", "文件接收失败，CRC 不匹配")
                 self.file_transfer_state = None
             elif frame_type == FRAME_TYPE_ACK_08:
@@ -452,16 +500,26 @@ class SerialTool:
                 self.file_transfer_state = None
 
             buffer = buffer[8+length+2:]  # 移除已处理帧
+    def serial_write_fucction(self, data):
+        if self.serial_port.is_open:
+            if isinstance(data, tk.StringVar):  # 检查 data 是否为 StringVar 类型
+                data = data.get().encode()  # 将 StringVar 转换为字节类型
+            elif isinstance(data, str):  # 检查 data 是否为字符串类型
+                data = data.encode()  # 将字符串转换为字节类型
 
-    def send_ack(self, ack_code):
-        frame = self.create_frame(ack_code, b"")
-        self.serial_port.write(frame)
-        # self.send_data(frame)
-        self.update_history(f"发送确认帧 {ack_code}", "")
+            self.serial_port.write(data)
+            self.update_frame_log("发送", data)
+    def send_ack(self, ack_code, data):
+        frame = self.create_frame(ack_code, data)
+        self.serial_write_fucction(frame)
 
-    def update_receive(self, data):
+    def update_frame_log(self, dir, data):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 获取当前时间并格式化
-        formatted_data = f"[{timestamp}] {data.decode('utf-8', errors='ignore')}\n"  # 格式化接收到的数据
+        
+        if isinstance(data, str):
+            formatted_data = f"[{timestamp}] {dir}: {data}\n"  # 如果 data 是字符串，直接使用
+        else:
+            formatted_data = f"[{timestamp}] {dir}: {data.hex()}\n"  # 如果 data 是字节，转换为十六进制
         self.receive_text.config(state="normal")
         self.receive_text.insert(tk.END, formatted_data)  # 使用格式化后的数据
         self.receive_text.config(state="disabled")
