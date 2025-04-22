@@ -1130,13 +1130,15 @@ class Application(tk.Tk):
     # ... [保留原有目录选择和其他方法] ...
 
     @staticmethod
-    def extract_keywords_from_file(file_path):
+    def extract_keywords_from_file(file_path,file_names):
         """从单个文件中提取关键字，并过滤长度小于等于 MIN_KEYWORD_LENGTH 的词"""
         # 正则表达式：匹配函数名和变量名，排除引号内的内容和 /* ... */ 注释块
         keyword_pattern = re.compile(
             r'(?<!["\'])\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?=\s*[\(;:])(?!["\'])'
         )
         block_comment_pattern = re.compile(r'/\*.*?\*/', re.DOTALL)  # 匹配 /* ... */
+        quoted_string_pattern = re.compile(r'"([^"]*)"')  # 匹配 "xxx" 中的内容
+        class_name_pattern = re.compile(r'\b\w+::')  # 匹配类名::模式
 
         keywords = set()
         try:
@@ -1146,11 +1148,17 @@ class Application(tk.Tk):
                 # 移除 /* ... */ 注释块
                 content = block_comment_pattern.sub('', content)
 
+                # 移除双引号内的内容
+                content = quoted_string_pattern.sub('', content)
+
+                # 移除类名::模式
+                content = class_name_pattern.sub('', content)
+
                 # 提取关键字
                 matches = keyword_pattern.findall(content)
                 keywords.update(
                     match for match in matches 
-                    if len(match) > MIN_KEYWORD_LENGTH and match not in C_KEYWORDS
+                    if len(match) > MIN_KEYWORD_LENGTH and match not in C_KEYWORDS and (file_names is None or match not in file_names)
                 )
         except Exception as e:
             print(f"无法读取文件 {file_path}：{str(e)}")
@@ -1161,13 +1169,24 @@ class Application(tk.Tk):
         """从文件夹中提取所有.c和.h文件的关键字"""
         all_keywords = set()
         extensions = ['.c', '.h', '.cpp', '.hpp', '.make', '.cpp']
+        file_names = set()  # 用于存储文件名
+
+        for root, _, files in os.walk(folder_path):
+            for file in files:
+                if any(file.endswith(ext) for ext in extensions):
+                    file_path = os.path.join(root, file)
+                    # 提取文件名（不带扩展名）
+                    file_name = os.path.splitext(file)[0]
+                    file_names.add(file_name)
+
         for root, _, files in os.walk(folder_path):
             for file in files:
                 if any(file.endswith(ext) for ext in extensions):
                     file_path = os.path.join(root, file)
                     # 通过类名调用静态方法
-                    keywords = Application.extract_keywords_from_file(file_path)
+                    keywords = Application.extract_keywords_from_file(file_path,file_names)
                     all_keywords.update(keywords)
+
         return all_keywords
 
     @staticmethod
