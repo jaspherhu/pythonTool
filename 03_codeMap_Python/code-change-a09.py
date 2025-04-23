@@ -1,21 +1,31 @@
 # -*- coding: utf-8 -*-
 
-# 原文件内容
+# 系统相关导入
 import os
+import sys
+import platform
+
+# 时间和随机数相关导入
 import random
+from datetime import datetime
+
+# 文件处理相关导入
 import json
-import string  # 新增导入
+import csv
+import chardet
+import shutil
+
+# 字符串处理相关导入
+import string
+import re
+
+# GUI相关导入
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
-from datetime import datetime
+
+# 线程相关导入
 import threading
-# 在文件顶部新增导入
-import re
-import csv  # 添加导入
-import platform
-import chardet
-import shutil  # 确保在调用copyfile之前导入
-import sys
+# ... existing code ...
 
 # 新增配置路径常量
 MAPPING_CONFIG_PATH = 'mapping_config.json'
@@ -34,15 +44,15 @@ C_KEYWORDS = {
     'memset', 'strcat', 'strcmp', 'strcpy', 'strlen', 'strncat', 'strncmp',
     'strncpy', 'strstr', 'strtok', 'strtol', 'strtoul', 'strtod', 'strtof',
     'strtold', 'strtoll', 'strtoull', 'strerror', 'strsignal', 'strcoll',
-    'strxfrm', 'memchr','memcmp', 'memcpy', 'memmove', 'memset', 'memccpy', 'uint16_t', 
-    'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 
-    'defined', '__func__', '__FILE__', '__LINE__', '__DATE__', '__TIME__', 'define', 
-    '__attribute__', '__builtin__', '__inline__', '__restrict__', '__signed__', '__volatile__', 
-    '__asm__', '__attribute__', '__builtin__', '__inline__', '__restrict__', '__signed__', '__volatile__', 
-    'control', 'break', 'case', 'char', 'const', 'continue', 'default', 'do',
-    'sprintf', 'printf', 'scanf', 'atoi', 'atof', 'atol', 'atoll', 'localtime', 'tm_mon', 'tm_mday', 
-    'tm_year', 'tm_hour', 'tm_min', 'tm_sec', 'mktime', 'localtime', 'malloc', 'free', 'calloc', 'realloc',
-    'osDelay' , 'va_start', 'va_end','vsnprintf', 'snprintf', 'vsnprintf', 'snprintf', 'vsnprintf', 'snprintf', 'vsnprintf', 'snprintf', 'vsnprintf', 'snprintf'
+    'strxfrm', 'memchr','memcmp', 'memcpy', 'memmove', 'memccpy',
+    'uint16_t', 'uint8_t', 'uint32_t', 'uint64_t', 'int8_t', 'int16_t', 'int32_t', 'int64_t',
+    'defined', '__func__', '__FILE__', '__LINE__', '__DATE__', '__TIME__', 'define',
+    '__attribute__', '__builtin__', '__inline__', '__restrict__', '__signed__', '__volatile__',
+    '__asm__', 'control',
+    'sprintf', 'printf', 'scanf', 'atoi', 'atof', 'atol', 'atoll',
+    'localtime', 'tm_mon', 'tm_mday', 'tm_year', 'tm_hour', 'tm_min', 'tm_sec', 'mktime',
+    'malloc', 'free', 'calloc', 'realloc', 'osDelay',
+    'va_start', 'va_end','vsnprintf', 'snprintf'
 }
 
 def get_script_dir():
@@ -90,7 +100,7 @@ def load_or_create_mapping():
     
     # 创建新映射表
     mapping, reverse_mapping = generate_fixed_mapping()
-    MAPPING_CONFIG_PATH = os.path.join(get_script_dir(), 'mapping_config.json')
+    # MAPPING_CONFIG_PATH = os.path.join(get_script_dir(), 'mapping_config.json')
     save_reverse_mapping(mapping, MAPPING_CONFIG_PATH)
     return mapping, reverse_mapping
 
