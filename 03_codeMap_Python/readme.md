@@ -90,3 +90,24 @@
 当前版本：20250302  
 更新日期：2025年3月2日  
 运行依赖：Python 3.6+ + Tkinter
+
+## how to use this software
+1. 安装依赖：`pip install -r requirements.txt`
+2. 运行脚本：`python code-change-a09.py`
+3. 按照提示操作即可
+
+## how to run this software
+1. 运行exe软件 
+2. 设置对象代码的总的目录
+3. 选择编码格式
+4. 选择扩展名
+5. 点击提取关键词
+6. 点击查看关键词
+7. 将关键词放到keyword_config.csv中
+8. 再次打开exe软件
+9. 点击查看关键词
+10. 查看自动随机生成映射后的关键词
+11. 点击开始转换
+
+## how to build exe
+pyinstaller --onefile --name codeFuse --icon=ysicons.ico code-change-a09.py

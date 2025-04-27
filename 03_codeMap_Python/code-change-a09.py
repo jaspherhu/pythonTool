@@ -7,6 +7,7 @@ import platform
 
 # 时间和随机数相关导入
 import random
+import collections
 from datetime import datetime
 
 # 文件处理相关导入
@@ -31,8 +32,7 @@ import threading
 MAPPING_CONFIG_PATH = 'mapping_config.json'
 VERSION = "20250302"
 # 新增全局常量：关键字最小长度
-MIN_KEYWORD_LENGTH = 5
-
+MIN_KEYWORD_LENGTH = 8
 
 # 新增：C语言关键词列表
 C_KEYWORDS = {
@@ -52,7 +52,402 @@ C_KEYWORDS = {
     'sprintf', 'printf', 'scanf', 'atoi', 'atof', 'atol', 'atoll',
     'localtime', 'tm_mon', 'tm_mday', 'tm_year', 'tm_hour', 'tm_min', 'tm_sec', 'mktime',
     'malloc', 'free', 'calloc', 'realloc', 'osDelay',
-    'va_start', 'va_end','vsnprintf', 'snprintf'
+    'va_start', 'va_end','vsnprintf', 'snprintf' 
+}
+
+EXCLUDED_IDENTIFIERS = {
+    # 1. C++11 Standard Library Identifiers (More comprehensive)
+    # Containers & Adapters
+    'array', 'vector', 'deque', 'forward_list', 'list', 'stack', 'queue', 'priority_queue',
+    'set', 'map', 'multiset', 'multimap', 'unordered_set', 'unordered_map', 'unordered_multiset', 'unordered_multimap',
+    # Iterators & Utilities
+    'iterator', 'begin', 'end', 'cbegin', 'cend', 'rbegin', 'rend', 'crbegin', 'crend',
+    'pair', 'tuple', 'get', 'make_pair', 'make_tuple', 'tie',
+    'initializer_list',
+    # Memory Management
+    'allocator', 'allocator_traits', 'pointer_traits',
+    'unique_ptr', 'shared_ptr', 'weak_ptr', 'make_unique', 'make_shared', 'enable_shared_from_this',
+    'owner_less', 'bad_weak_ptr',
+    # Input/Output Streams
+    'ios', 'streambuf', 'istream', 'ostream', 'iostream',
+    'stringbuf', 'istringstream', 'ostringstream', 'stringstream',
+    'filebuf', 'ifstream', 'ofstream', 'fstream',
+    'cin', 'cout', 'cerr', 'clog', 'wcin', 'wcout', 'wcerr', 'wclog',
+    'endl', 'flush', 'ws', 'showbase', 'showpoint', 'showpos', 'uppercase', 'nouppercase',
+    'boolalpha', 'noboolalpha', 'fixed', 'scientific', 'hexfloat', 'defaultfloat', 'internal', 'left', 'right',
+    'dec', 'hex', 'oct', 'setbase', 'setfill', 'setprecision', 'setw',
+    'get_money', 'put_money', 'get_time', 'put_time',
+    # Strings & Text Processing
+    'string', 'wstring', 'u16string', 'u32string', 'basic_string',
+    'char_traits', 'stoi', 'stol', 'stoul', 'stoll', 'stoull', 'stof', 'stod', 'stold', 'to_string', 'to_wstring',
+    'regex', 'regex_match', 'regex_search', 'regex_replace', 'smatch', 'cmatch', 'wsmatch', 'wcmatch', 'sub_match',
+    'regex_iterator', 'regex_token_iterator', 'regex_error', 'regex_constants',
+    # Algorithms & Numerics
+    'algorithm', 'numeric', 'functional', 'ratio', 'complex', 'valarray',
+    'sort', 'stable_sort', 'partial_sort', 'partial_sort_copy', 'is_sorted', 'is_sorted_until',
+    'find', 'find_if', 'find_if_not', 'find_end', 'find_first_of',
+    'adjacent_find', 'count', 'count_if', 'mismatch', 'equal', 'is_permutation', 'search', 'search_n',
+    'copy', 'copy_if', 'copy_n', 'copy_backward', 'move', 'move_backward',
+    'fill', 'fill_n', 'transform', 'generate', 'generate_n', 'remove', 'remove_if', 'remove_copy', 'remove_copy_if',
+    'replace', 'replace_if', 'replace_copy', 'replace_copy_if', 'swap', 'swap_ranges', 'iter_swap',
+    'reverse', 'reverse_copy', 'rotate', 'rotate_copy', 'shuffle', 'unique', 'unique_copy',
+    'lower_bound', 'upper_bound', 'equal_range', 'binary_search',
+    'merge', 'inplace_merge', 'includes', 'set_union', 'set_intersection', 'set_difference', 'set_symmetric_difference',
+    'push_heap', 'pop_heap', 'make_heap', 'sort_heap', 'is_heap', 'is_heap_until',
+    'min', 'max', 'minmax', 'min_element', 'max_element', 'minmax_element', 'lexicographical_compare',
+    'accumulate', 'inner_product', 'partial_sum', 'adjacent_difference', 'iota',
+    'abs', 'labs', 'llabs', 'fabs', 'fma', 'pow', 'sqrt', 'cbrt', 'hypot', 'exp', 'exp2', 'expm1', 'log', 'log10', 'log1p', 'log2',
+    'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'atan2', 'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh',
+    'ceil', 'floor', 'trunc', 'round', 'lround', 'llround', 'nearbyint', 'rint', 'lrint', 'llrint',
+    'fmod', 'remainder', 'remquo', 'copysign', 'nan', 'nanf', 'nanl', 'nextafter', 'nexttoward',
+    'fdim', 'fmax', 'fmin', 'fpclassify', 'isfinite', 'isinf', 'isnan', 'isnormal', 'signbit', 'isgreater', 'isgreaterequal', 'isless', 'islessequal', 'islessgreater', 'isunordered',
+    'bind', 'ref', 'cref', 'mem_fn', 'function', 'hash', 'placeholders', '_1', '_2', # ... placeholders
+    'plus', 'minus', 'multiplies', 'divides', 'modulus', 'negate', 'equal_to', 'not_equal_to', 'greater', 'less', 'greater_equal', 'less_equal',
+    'logical_and', 'logical_or', 'logical_not', 'bit_and', 'bit_or', 'bit_xor', 'bit_not',
+    # Exceptions & Diagnostics
+    'exception', 'bad_exception', 'nested_exception', 'throw_with_nested', 'rethrow_if_nested',
+    'logic_error', 'domain_error', 'invalid_argument', 'length_error', 'out_of_range',
+    'runtime_error', 'range_error', 'overflow_error', 'underflow_error',
+    'system_error', 'error_code', 'error_condition', 'error_category',
+    'bad_alloc', 'bad_cast', 'bad_typeid', 'bad_function_call',
+    'assert', # cassert
+    # Time & Date
+    'chrono', 'duration', 'time_point', 'system_clock', 'steady_clock', 'high_resolution_clock',
+    'duration_cast', 'time_point_cast', 'hours', 'minutes', 'seconds', 'milliseconds', 'microseconds', 'nanoseconds',
+    'time_t', 'clock_t', 'tm', 'clock', 'time', 'difftime', 'mktime', 'strftime', 'strptime', 'localtime', 'gmtime', 'asctime', 'ctime',
+    # Threading & Concurrency
+    'thread', 'mutex', 'timed_mutex', 'recursive_mutex', 'recursive_timed_mutex',
+    'lock_guard', 'unique_lock', 'shared_lock', # shared_lock is C++14, but often used
+    'condition_variable', 'condition_variable_any', 'notify_all_at_thread_exit',
+    'future', 'shared_future', 'promise', 'packaged_task', 'async', 'launch', 'future_status', 'future_error', 'future_errc',
+    'atomic', 'atomic_flag', 'memory_order', 'memory_order_relaxed', 'memory_order_consume', 'memory_order_acquire', 'memory_order_release', 'memory_order_acq_rel', 'memory_order_seq_cst',
+    'this_thread', 'get_id', 'yield', 'sleep_for', 'sleep_until',
+    # Type Support & Traits
+    'type_info', 'type_index', 'typeid', 'bad_cast', 'bad_typeid',
+    'size_t', 'ptrdiff_t', 'nullptr_t', 'max_align_t', 'byte', # byte is C++17
+    'integral_constant', 'bool_constant', 'true_type', 'false_type',
+    'is_void', 'is_null_pointer', 'is_integral', 'is_floating_point', 'is_array', 'is_enum', 'is_union', 'is_class', 'is_function', 'is_pointer', 'is_lvalue_reference', 'is_rvalue_reference', 'is_member_object_pointer', 'is_member_function_pointer',
+    'is_fundamental', 'is_arithmetic', 'is_scalar', 'is_object', 'is_compound', 'is_reference', 'is_member_pointer',
+    'is_const', 'is_volatile', 'is_trivial', 'is_trivially_copyable', 'is_standard_layout', 'is_pod', 'is_literal_type', 'is_empty', 'is_polymorphic', 'is_abstract', 'is_final', 'is_aggregate',
+    'is_signed', 'is_unsigned', 'is_bounded_array', 'is_unbounded_array',
+    'is_constructible', 'is_trivially_constructible', 'is_nothrow_constructible', 'is_default_constructible', 'is_copy_constructible', 'is_move_constructible',
+    'is_assignable', 'is_trivially_assignable', 'is_nothrow_assignable', 'is_copy_assignable', 'is_move_assignable',
+    'is_destructible', 'is_trivially_destructible', 'is_nothrow_destructible',
+    'is_swappable_with', 'is_swappable', 'is_nothrow_swappable_with', 'is_nothrow_swappable',
+    'has_virtual_destructor',
+    'alignment_of', 'rank', 'extent',
+    'is_same', 'is_base_of', 'is_convertible',
+    'remove_const', 'remove_volatile', 'remove_cv', 'add_const', 'add_volatile', 'add_cv',
+    'remove_reference', 'add_lvalue_reference', 'add_rvalue_reference',
+    'remove_pointer', 'add_pointer',
+    'make_signed', 'make_unsigned',
+    'remove_extent', 'remove_all_extents',
+    'aligned_storage', 'aligned_union', 'decay', 'enable_if', 'conditional', 'common_type', 'underlying_type', 'result_of',
+    # Random Number Generation
+    'random', 'random_device', 'default_random_engine', 'minstd_rand0', 'minstd_rand', 'mt19937', 'mt19937_64', 'ranlux24_base', 'ranlux48_base', 'ranlux24', 'ranlux48', 'knuth_b',
+    'uniform_int_distribution', 'uniform_real_distribution', 'bernoulli_distribution', 'binomial_distribution', 'geometric_distribution', 'negative_binomial_distribution',
+    'poisson_distribution', 'exponential_distribution', 'gamma_distribution', 'weibull_distribution', 'extreme_value_distribution',
+    'normal_distribution', 'lognormal_distribution', 'chi_squared_distribution', 'cauchy_distribution', 'fisher_f_distribution', 'student_t_distribution',
+    'discrete_distribution', 'piecewise_constant_distribution', 'piecewise_linear_distribution', 'seed_seq', 'generate_canonical',
+    # Other C++ related keywords/identifiers usually not replaced
+    'std', 'nullptr',
+
+    # 2. Common Predefined Macros & Compiler Macros
+    'NULL', 'TRUE', 'FALSE', 'EOF', 'EXIT_SUCCESS', 'EXIT_FAILURE',
+    'ASSERT', 'static_assert', # Note: static_assert is also a C++ keyword
+    'DEBUG', '_DEBUG', 'NDEBUG',
+    '__FILE__', '__LINE__', '__DATE__', '__TIME__', '__func__', '__FUNCTION__', '__PRETTY_FUNCTION__',
+    '_WIN32', '_WIN64', '__linux__', '__APPLE__', '__MACH__', '__unix__', '__posix',
+    '__GNUC__', '__clang__', '_MSC_VER', '__cplusplus',
+    'offsetof', 'va_list', 'va_start', 'va_arg', 'va_end', 'va_copy',
+    # --- 新增：明确排除常见的预处理相关词语，以防万一 ---
+    'include', 'define', 'undef', 'ifdef', 'ifndef', 'if', 'elif', 'else', 'endif', 'line', 'error', 'pragma', 'defined',
+    # C++17/C++20 Preprocessor Conditionals
+    '__has_include', '__has_cpp_attribute',
+    # Common #pragma arguments/keywords (Compiler-specific, but common usages)
+    'once', 'pack', 'warning', 'message', 'push', 'pop', 'region', 'endregion', 'omp', # OpenMP often uses 'omp'
+
+    # 3. Common C Standard Library Functions (Many overlap with C++ headers)
+    # stdio.h
+    'printf', 'fprintf', 'sprintf', 'snprintf', 'vprintf', 'vfprintf', 'vsprintf', 'vsnprintf',
+    'scanf', 'fscanf', 'sscanf', 'vscanf', 'vfscanf', 'vsscanf',
+    'fopen', 'freopen', 'fclose', 'fflush', 'setbuf', 'setvbuf',
+    'fread', 'fwrite', 'fgetc', 'getc', 'getchar', 'fgets', 'fputc', 'putc', 'putchar', 'fputs', 'puts', 'ungetc',
+    'fseek', 'ftell', 'rewind', 'fgetpos', 'fsetpos',
+    'clearerr', 'feof', 'ferror', 'perror',
+    'remove', 'rename', 'tmpfile', 'tmpnam',
+    'stdin', 'stdout', 'stderr',
+    # stdlib.h
+    'malloc', 'calloc', 'realloc', 'free', 'aligned_alloc',
+    'atoi', 'atof', 'atol', 'atoll', 'strtod', 'strtof', 'strtold', 'strtol', 'strtoul', 'strtoll', 'strtoull',
+    'rand', 'srand', 'abort', 'atexit', 'exit', '_Exit', 'at_quick_exit', 'quick_exit', 'getenv', 'system', 'perror',
+    'bsearch', 'qsort',
+    # 'abs', 'labs', 'llabs' are also in <cmath>
+    'div', 'ldiv', 'lldiv',
+    'mblen', 'mbtowc', 'wctomb', 'mbstowcs', 'wcstombs',
+    # string.h (cstring)
+    'strcpy', 'strncpy', 'strcat', 'strncat', 'strcmp', 'strncmp', 'strcoll', 'strxfrm',
+    'strchr', 'strrchr', 'strspn', 'strcspn', 'strpbrk', 'strstr', 'strtok', 'strerror',
+    'memset', 'memcpy', 'memmove', 'memcmp', 'memchr',
+    'strlen',
+    # time.h (ctime)
+    # 'clock_t', 'time_t', 'tm' are types
+    # 'clock', 'time', 'difftime', 'mktime', 'strftime', 'localtime', 'gmtime', 'asctime', 'ctime' listed above
+    # locale.h (clocale)
+    'setlocale', 'localeconv',
+    # setjmp.h (csetjmp)
+    'setjmp', 'longjmp', 'jmp_buf',
+    # signal.h (csignal)
+    'signal', 'raise', 'SIG_DFL', 'SIG_ERR', 'SIG_IGN', 'SIGABRT', 'SIGFPE', 'SIGILL', 'SIGINT', 'SIGSEGV', 'SIGTERM',
+
+    # 4. Common POSIX / Linux Identifiers (Not exhaustive)
+    # Types
+    'pid_t', 'uid_t', 'gid_t', 'off_t', 'mode_t', 'ssize_t', 'pthread_t', 'pthread_attr_t', 'ifreq',
+    'pthread_mutex_t', 'pthread_mutexattr_t', 'pthread_cond_t', 'pthread_condattr_t', 'pthread_rwlock_t', 'pthread_rwlockattr_t',
+    'pthread_key_t', 'sem_t', 'mqd_t', 'DIR', 'dirent', 'stat', 'statfs', 'sigset_t', 'siginfo_t', 'stack_t', 'termios', 'canid_t',
+    'timespec', 'timeval', 'timezone', 'fd_set', 'sockaddr', 'sockaddr_storage', 'sockaddr_in', 'sockaddr_in6', 'sockaddr_un', 'sockaddr_can', 'socklen_t', 'sa_family_t', 'addrinfo', 'can_frame', 'can_filter', 'linger', 'sysinfo',
+    # Constants
+    'AF_INET', 'AF_INET6', 'AF_UNIX', 'AF_CAN', 'AF_UNSPEC', 'PF_CAN', 'SOCK_STREAM', 'SOCK_DGRAM', 'SOCK_RAW', 'SOCK_SEQPACKET', 'CAN_RAW',
+    'SOL_SOCKET', 'SOL_TCP', 'SOL_CAN_RAW', 'SO_REUSEADDR', 'SO_KEEPALIVE', 'SO_ERROR', 'SO_SNDBUF', 'SO_RCVBUF', 'SO_SNDTIMEO', 'SO_RCVTIMEO', 'SO_LINGER', 'SO_BSDCOMPAT', 'TCP_NODELAY', 'TCP_KEEPIDLE', 'TCP_KEEPINTVL', 'TCP_KEEPCNT', 'CAN_RAW_FILTER',
+    'IPPROTO_IP', 'IPPROTO_TCP', 'IPPROTO_UDP', 'IPPROTO_ICMP', 'IPPROTO_RAW',
+    'O_RDONLY', 'O_WRONLY', 'O_RDWR', 'O_CREAT', 'O_EXCL', 'O_TRUNC', 'O_APPEND', 'O_NONBLOCK', 'O_NOCTTY', 'O_SYNC', 'O_ASYNC',
+    'F_OK', 'R_OK', 'W_OK', 'X_OK', 'SEEK_SET', 'SEEK_CUR', 'SEEK_END',
+    'STDIN_FILENO', 'STDOUT_FILENO', 'STDERR_FILENO',
+    'S_IFMT', 'S_IFSOCK', 'S_IFLNK', 'S_IFREG', 'S_IFBLK', 'S_IFDIR', 'S_IFCHR', 'S_IFIFO', 'S_ISUID', 'S_ISGID', 'S_ISVTX',
+    'S_IRWXU', 'S_IRUSR', 'S_IWUSR', 'S_IXUSR', 'S_IRWXG', 'S_IRGRP', 'S_IWGRP', 'S_IXGRP', 'S_IRWXO', 'S_IROTH', 'S_IWOTH', 'S_IXOTH',
+    'FD_SETSIZE', 'FD_ZERO', 'FD_SET', 'FD_CLR', 'FD_ISSET',
+    'PTHREAD_MUTEX_INITIALIZER', 'PTHREAD_COND_INITIALIZER', 'PTHREAD_RWLOCK_INITIALIZER',
+    'SIG_BLOCK', 'SIG_UNBLOCK', 'SIG_SETMASK',
+    'INADDR_ANY', 'MSG_NOSIGNAL', 'IPC_CREAT',
+    'EAGAIN', 'EWOULDBLOCK', 'EINPROGRESS', 'EINTR',
+    # termios.h constants (baud rates, flags)
+    'B0', 'B50', 'B75', 'B110', 'B134', 'B150', 'B200', 'B300', 'B600', 'B1200', 'B1800', 'B2400', 'B4800', 'B9600', 'B19200', 'B38400', 'B57600', 'B115200', 'B230400', 'B460800',
+    'ICANON', 'ECHO', 'ECHOE', 'ECHOK', 'ECHONL', 'ISIG', 'IEXTEN', 'NOFLSH', 'TOSTOP', 'PENDIN',
+    'IGNBRK', 'BRKINT', 'IGNPAR', 'PARMRK', 'INPCK', 'ISTRIP', 'INLCR', 'IGNCR', 'ICRNL', 'IUCLC', 'IXON', 'IXOFF', 'IXANY', 'IMAXBEL', 'IUTF8',
+    'OPOST', 'OLCUC', 'ONLCR', 'OCRNL', 'ONOCR', 'ONLRET', 'OFILL', 'OFDEL', 'NLDLY', 'NL0', 'NL1', 'CRDLY', 'CR0', 'CR1', 'CR2', 'CR3', 'TABDLY', 'TAB0', 'TAB1', 'TAB2', 'TAB3', 'BSDLY', 'BS0', 'BS1', 'VTDLY', 'VT0', 'VT1', 'FFDLY', 'FF0', 'FF1',
+    'CSIZE', 'CS5', 'CS6', 'CS7', 'CS8', 'CSTOPB', 'CREAD', 'PARENB', 'PARODD', 'HUPCL', 'CLOCAL', 'CMSPAR', 'CRTSCTS',
+    'VINTR', 'VQUIT', 'VERASE', 'VKILL', 'VEOF', 'VTIME', 'VMIN', 'VSWTC', 'VSTART', 'VSTOP', 'VSUSP', 'VEOL', 'VREPRINT', 'VDISCARD', 'VWERASE', 'VLNEXT', 'VEOL2', 'NCCS',
+    'TCSANOW', 'TCSADRAIN', 'TCSAFLUSH', 'TCIFLUSH', 'TCOFLUSH', 'TCIOFLUSH', 'TCIOFF', 'TCION', 'TCOOFF', 'TCOON',
+    'F_GETFL', 'F_SETFL', 'PR_GET_NAME', 'PR_SET_NAME',
+    'SIOCGIFINDEX', 'TIOCGSERIAL', 'TIOCSSERIAL', 'TIOCGRS485', 'TIOCSRS485', 'WDIOC_SETTIMEOUT', 'WDIOC_KEEPALIVE',
+    # Functions
+    'read', 'write', 'pread', 'pwrite', 'pipe', 'pipe2', 'alarm', 'sleep', 'usleep', 'pause',
+    'chown', 'fchown', 'lchown', 'chdir', 'fchdir', 'getcwd', 'dup', 'dup2', 'dup3',
+    'access', 'faccessat', 'execve', 'execl', 'execlp', 'execle', 'execv', 'execvp', '_exit', 'exit',
+    'fork', 'vfork', 'getpid', 'getppid', 'getuid', 'geteuid', 'getgid', 'getegid',
+    'setuid', 'seteuid', 'setgid', 'setegid', 'getpgid', 'setpgid', 'getpgrp', 'setpgrp',
+    'getsid', 'setsid', 'gethostname', 'sethostname', 'getlogin', 'getlogin_r', 'ttyname', 'ttyname_r', 'isatty',
+    'link', 'linkat', 'symlink', 'symlinkat', 'readlink', 'readlinkat', 'unlink', 'unlinkat', 'rmdir',
+    'sync', 'fsync', 'fdatasync', 'truncate', 'ftruncate',
+    'open', 'openat', 'creat', 'fcntl', 'ioctl',
+    'opendir', 'fdopendir', 'readdir', 'readdir_r', 'closedir', 'rewinddir', 'seekdir', 'telldir',
+    'chmod', 'fchmod', 'fchmodat', 'umask', 'mkdir', 'mkdirat', 'mknod', 'mknodat',
+    'statfs', 'fstatfs',
+    'wait', 'waitpid', 'waitid',
+    'socket', 'socketpair', 'bind', 'connect', 'listen', 'accept', 'accept4', 'shutdown', 'close',
+    'send', 'sendto', 'sendmsg', 'recv', 'recvfrom', 'recvmsg',
+    'getsockname', 'getpeername', 'getsockopt', 'setsockopt',
+    'getaddrinfo', 'freeaddrinfo', 'gai_strerror', 'getnameinfo',
+    'tcgetattr', 'tcsetattr', 'cfsetispeed', 'cfsetospeed', 'cfgetispeed', 'cfgetospeed', 'tcsendbreak', 'tcdrain', 'tcflush', 'tcflow', 'cfmakeraw',
+    'htons', 'htonl', 'ntohs', 'ntohl', 'inet_addr', 'inet_aton', 'inet_ntoa', 'inet_ntop', 'inet_pton', 'sysinfo', 'syscall', 'pthread_sigmask', 'kill',
+    'select', 'pselect', 'poll', 'ppoll', 'epoll_create', 'epoll_create1', 'epoll_ctl', 'epoll_wait', 'epoll_pwait',
+    'pthread_create', 'pthread_join', 'pthread_detach', 'pthread_exit', 'pthread_self', 'pthread_equal', 'pthread_cancel', 'pthread_setcancelstate', 'pthread_setcanceltype', 'pthread_testcancel',
+    'pthread_attr_init', 'pthread_attr_destroy', 'pthread_attr_setdetachstate', 'pthread_attr_getdetachstate', 'pthread_attr_setschedparam', 'pthread_attr_getschedparam', 'pthread_attr_setschedpolicy', 'pthread_attr_getschedpolicy', 'pthread_attr_setinheritsched', 'pthread_attr_getinheritsched', 'pthread_attr_setscope', 'pthread_attr_getscope', 'pthread_attr_setstacksize', 'pthread_attr_getstacksize', 'pthread_attr_setstack', 'pthread_attr_getstack',
+    'pthread_mutex_init', 'pthread_mutex_destroy', 'pthread_mutex_lock', 'pthread_mutex_trylock', 'pthread_mutex_unlock', 'pthread_mutex_timedlock',
+    'pthread_cond_init', 'pthread_cond_destroy', 'pthread_cond_wait', 'pthread_cond_timedwait', 'pthread_cond_signal', 'pthread_cond_broadcast',
+    'pthread_rwlock_init', 'pthread_rwlock_destroy', 'pthread_rwlock_rdlock', 'pthread_rwlock_tryrdlock', 'pthread_rwlock_wrlock', 'pthread_rwlock_trywrlock', 'pthread_rwlock_unlock', 'pthread_rwlock_timedrdlock', 'pthread_rwlock_timedwrlock',
+    'pthread_key_create', 'pthread_key_delete', 'pthread_setspecific', 'pthread_getspecific',
+    'pthread_once', 'pthread_atfork',
+    'sigaction', 'sigprocmask', 'sigpending', 'sigsuspend', 'sigwait', 'sigwaitinfo', 'sigtimedwait', 'kill', 'killpg', 'raise', 'alarm', 'pause',
+    'sigemptyset', 'sigfillset', 'sigaddset', 'sigdelset', 'sigismember',
+    'sem_open', 'sem_close', 'sem_unlink', 'sem_wait', 'sem_trywait', 'sem_timedwait', 'sem_post', 'sem_getvalue', 'sem_init', 'sem_destroy',
+    'dlopen', 'dlsym', 'dlclose', 'dlerror', # Dynamic linking
+    'mmap', 'munmap', 'msync', 'mprotect', 'mlock', 'munlock', 'mlockall', 'munlockall', # Memory management
+    'gettimeofday', 'settimeofday', 'clock_gettime', 'clock_settime', 'clock_getres', 'nanosleep', # Time
+    'syslog', 'openlog', 'closelog', 'setlogmask', # Logging
+
+    # 5. Common Windows API Identifiers (More examples, still not exhaustive)
+    # Basic Types & Macros
+    'BOOL', 'BYTE', 'WORD', 'DWORD', 'UINT', 'INT', 'LONG', 'ULONG', 'SHORT', 'USHORT', 'CHAR', 'WCHAR', 'TCHAR',
+    'HANDLE', 'HWND', 'HINSTANCE', 'HMODULE', 'HDC', 'HICON', 'HCURSOR', 'HBRUSH', 'HMENU', 'HKEY', 'HRGN', 'HPEN', 'HFONT',
+    'LPARAM', 'WPARAM', 'LRESULT', 'COLORREF',
+    'LPSTR', 'LPCSTR', 'LPWSTR', 'LPCWSTR', 'LPTSTR', 'LPCTSTR', 'LPVOID', 'LPCVOID', 'DWORD_PTR', 'ULONG_PTR', 'LONG_PTR',
+    'WINAPI', 'APIENTRY', 'CALLBACK', 'NTAPI',
+    'TRUE', 'FALSE', 'NULL', 'INVALID_HANDLE_VALUE', 'MAX_PATH',
+    'MAKEINTRESOURCE', 'LOWORD', 'HIWORD', 'LOBYTE', 'HIBYTE',
+    # Core Functions
+    'GetLastError', 'SetLastError', 'FormatMessageA', 'FormatMessageW', 'GetVersionExA', 'GetVersionExW', 'IsWindowsXPorGreater', 'IsWindowsVistaOrGreater', 'IsWindows7OrGreater', 'IsWindows8OrGreater', 'IsWindows10OrGreater',
+    # File I/O & System Info
+    'CreateFileA', 'CreateFileW', 'ReadFile', 'WriteFile', 'SetFilePointer', 'SetEndOfFile', 'GetFileSize', 'GetFileSizeEx', 'CloseHandle',
+    'GetSystemDirectoryA', 'GetSystemDirectoryW', 'GetWindowsDirectoryA', 'GetWindowsDirectoryW', 'GetCurrentDirectoryA', 'GetCurrentDirectoryW', 'SetCurrentDirectoryA', 'SetCurrentDirectoryW',
+    'GetFullPathNameA', 'GetFullPathNameW', 'GetTempPathA', 'GetTempPathW', 'CreateDirectoryA', 'CreateDirectoryW', 'RemoveDirectoryA', 'RemoveDirectoryW',
+    'DeleteFileA', 'DeleteFileW', 'MoveFileA', 'MoveFileW', 'MoveFileExA', 'MoveFileExW', 'CopyFileA', 'CopyFileW', 'CopyFileExA', 'CopyFileExW',
+    'FindFirstFileA', 'FindFirstFileW', 'FindNextFileA', 'FindNextFileW', 'FindClose', 'GetFileAttributesA', 'GetFileAttributesW', 'GetFileAttributesExA', 'GetFileAttributesExW',
+    'GetSystemTime', 'GetLocalTime', 'SetSystemTime', 'SetLocalTime', 'GetTickCount', 'GetTickCount64', 'QueryPerformanceCounter', 'QueryPerformanceFrequency',
+    # Process & Thread
+    'GetCurrentProcess', 'GetCurrentProcessId', 'GetCurrentThread', 'GetCurrentThreadId',
+    'CreateProcessA', 'CreateProcessW', 'TerminateProcess', 'ExitProcess', 'GetExitCodeProcess',
+    'CreateThread', 'ExitThread', 'GetExitCodeThread', 'SuspendThread', 'ResumeThread', 'Sleep', 'SwitchToThread',
+    'WaitForSingleObject', 'WaitForMultipleObjects', 'CreateEventA', 'CreateEventW', 'SetEvent', 'ResetEvent', 'PulseEvent',
+    'CreateMutexA', 'CreateMutexW', 'ReleaseMutex', 'CreateSemaphoreA', 'CreateSemaphoreW', 'ReleaseSemaphore',
+    'InitializeCriticalSection', 'EnterCriticalSection', 'LeaveCriticalSection', 'DeleteCriticalSection', 'TryEnterCriticalSection',
+    'TlsAlloc', 'TlsFree', 'TlsSetValue', 'TlsGetValue',
+    # Memory Management
+    'VirtualAlloc', 'VirtualFree', 'VirtualProtect', 'VirtualQuery',
+    'HeapCreate', 'HeapDestroy', 'HeapAlloc', 'HeapReAlloc', 'HeapFree', 'GetProcessHeap',
+    'GlobalAlloc', 'GlobalFree', 'GlobalLock', 'GlobalUnlock',
+    'LocalAlloc', 'LocalFree', 'LocalLock', 'LocalUnlock',
+    # Dynamic Linking
+    'LoadLibraryA', 'LoadLibraryW', 'LoadLibraryExA', 'LoadLibraryExW', 'FreeLibrary', 'GetProcAddress', 'GetModuleHandleA', 'GetModuleHandleW', 'GetModuleFileNameA', 'GetModuleFileNameW',
+    # Windowing (User32.dll)
+    'RegisterClassA', 'RegisterClassW', 'RegisterClassExA', 'RegisterClassExW', 'UnregisterClassA', 'UnregisterClassW',
+    'CreateWindowExA', 'CreateWindowExW', 'DestroyWindow', 'ShowWindow', 'UpdateWindow', 'IsWindowVisible', 'IsWindowEnabled',
+    'GetMessageA', 'GetMessageW', 'TranslateMessage', 'DispatchMessageA', 'DispatchMessageW', 'PeekMessageA', 'PeekMessageW',
+    'PostMessageA', 'PostMessageW', 'SendMessageA', 'SendMessageW', 'PostThreadMessageA', 'PostThreadMessageW', 'SendNotifyMessageA', 'SendNotifyMessageW',
+    'DefWindowProcA', 'DefWindowProcW', 'CallWindowProcA', 'CallWindowProcW', 'GetWindowLongA', 'GetWindowLongW', 'SetWindowLongA', 'SetWindowLongW', 'GetWindowLongPtrA', 'GetWindowLongPtrW', 'SetWindowLongPtrA', 'SetWindowLongPtrW',
+    'GetClientRect', 'GetWindowRect', 'MoveWindow', 'SetWindowPos', 'BeginPaint', 'EndPaint', 'GetDC', 'ReleaseDC', 'InvalidateRect', 'ValidateRect',
+    'MessageBoxA', 'MessageBoxW', 'MessageBoxExA', 'MessageBoxExW', 'DialogBoxParamA', 'DialogBoxParamW', 'EndDialog', 'GetDlgItem', 'SendDlgItemMessageA', 'SendDlgItemMessageW',
+    'SetTimer', 'KillTimer', 'GetCursorPos', 'SetCursorPos', 'ScreenToClient', 'ClientToScreen',
+    # GDI (Gdi32.dll)
+    'CreateCompatibleDC', 'DeleteDC', 'CreateCompatibleBitmap', 'DeleteObject', 'SelectObject', 'GetStockObject',
+    'CreatePen', 'CreateSolidBrush', 'CreateFontA', 'CreateFontW', 'SetTextColor', 'SetBkColor', 'SetBkMode',
+    'TextOutA', 'TextOutW', 'DrawTextA', 'DrawTextW', 'Rectangle', 'Ellipse', 'MoveToEx', 'LineTo', 'BitBlt', 'StretchBlt',
+    # Sockets (Winsock2.h - ws2_32.dll)
+    'WSAStartup', 'WSACleanup', 'WSAGetLastError', 'socket', 'closesocket', 'bind', 'listen', 'accept', 'connect', 'send', 'recv', 'sendto', 'recvfrom',
+    'select', 'ioctlsocket', 'gethostbyname', 'gethostbyaddr', 'getaddrinfo', 'freeaddrinfo', 'getnameinfo',
+    # 'htons', 'htonl', 'ntohs', 'ntohl', 'inet_addr', 'inet_ntoa' are common but defined elsewhere too
+    # Registry (Advapi32.dll)
+    'RegOpenKeyExA', 'RegOpenKeyExW', 'RegCloseKey', 'RegQueryValueExA', 'RegQueryValueExW', 'RegSetValueExA', 'RegSetValueExW', 'RegCreateKeyExA', 'RegCreateKeyExW', 'RegDeleteKeyA', 'RegDeleteKeyW', 'RegDeleteValueA', 'RegDeleteValueW',
+
+    # 6. Other Common Non-Replaceable Identifiers
+    'main', 'wmain', '_tmain',
+    'WinMain', 'wWinMain', '_tWinMain',
+    'DllMain', '_DllMainCRTStartup',
+    'argc', 'argv', 'envp', 'wargv', 'targv',
+    'std', # Explicitly ensure std namespace itself is here
+
+    # 7. Common Typedefs (Often project-specific or from C headers)
+    # Fixed-width integers (from <cstdint> or similar)
+    'int8_t', 'uint8_t', 'int16_t', 'uint16_t', 'int32_t', 'uint32_t', 'int64_t', 'uint64_t',
+    'int_fast8_t', 'uint_fast8_t', 'int_fast16_t', 'uint_fast16_t', 'int_fast32_t', 'uint_fast32_t', 'int_fast64_t', 'uint_fast64_t',
+    'int_least8_t', 'uint_least8_t', 'int_least16_t', 'uint_least16_t', 'int_least32_t', 'uint_least32_t', 'int_least64_t', 'uint_least64_t',
+    'intmax_t', 'uintmax_t', 'intptr_t', 'uintptr_t', # Already listed but good to group
+    # Custom types found in std_def.h
+    'uint8', 'uint16', 'uint32', 'uint64',
+    'int8', 'int16', 'int32', 'int64',
+    'EBool', 'TId', 'THandle', 'EWeekDay', 'EErrorCode',
+    # Other potentially common typedefs
+    'byte', 'word', 'dword', 'qword', # Often used, overlaps with Windows types
+    'bool8', 'bool16', 'bool32',
+    'float32', 'float64',
+
+    # 8. Specific Frameworks (Add as needed)
+    # Example: Qt
+    # 'QObject', 'QString', 'QWidget', 'QApplication', 'QMainWindow', 'QPushButton', 'QLabel', 'QLineEdit', 'QDialog', 'QList', 'QVector', 'QMap', 'SLOT', 'SIGNAL', 'emit',
+    # Example: Boost
+    # 'boost', 'shared_ptr', 'scoped_ptr', 'filesystem', 'thread', 'asio',
+
+    # 9. Project Common Macros & Types (from analyzed headers)
+    # from comMacro.h & traverse__VA_ARGS__mocro.h
+    'LINE_SEPARATOR', 'ARRAY_LEN', 'VALID_ARRAY_INDEX', 'FOR_LOOP_ARRAY', 'VAR_MEM_ARGS', 'VAR_MEM_ARGS_CONST',
+    'VAR_MEM_ARGS_CHAR', 'VAR_MEM_ARGS_CONST_CHAR', 'ARRAY_MEM_ARGS', 'ARRAY_MEM_ARGS_CONST', 'RESET_VAR',
+    'RESET_PTR_VAR', 'RESET_MEM', 'MEMSET', 'MEMSET2ARR', 'MEMCPY', 'MEMCPY2ARR', 'MEMMOVE', 'MEMMOVE2ARR',
+    'MEMCMP', 'MEMCMP_OF_ARR', 'STRNCPY', 'STRCPY2ARR', 'STRCPY_FROM_ARR', 'STRCAT', 'STRNCAT', 'STRNCMP',
+    'STRNCMP_OF_ARR', 'STRPRI2ARR', 'STRLEN', 'STRLEN_OF_ARR', 'CLEAR_STR', 'IS_NULL_STR', 'IS_NOT_NULL_STR',
+    'IS_VALID_HANDLE', 'NUM_OF_BITS', 'BYTE_OF_VAR', 'BITS_OF_VAR', 'BIT_VALUE_ADDR', 'BIT_VALUE', 'BIT_SET_1',
+    'SET_BIT', 'CLEAR_BIT', 'LIMIT_MIN', 'LIMIT_MAX', 'MIN', 'MAX', 'CAST_OPERATE', 'CAST_ASSIGN', 'BIN_ASSIGN',
+    'DEFINE_VAR_INIT', 'DEFINE_VAR_INIT_FROM_ADDR', 'TYPE_VALUE_OF_ADDR', 'READ_VAR_FROM_ADDR', 'READ_VAR_FROM_ADD_SELF_ADDR',
+    'WRITE_VAR_TO_ADDR', 'WRITE_VAR_TO_ADD_SELF_ADDR', 'NAMESPACE_BEGIN', 'NAMESPACE_END', 'SWAP_VALUE', 'TO_BCD',
+    'FROM_BCD', 'GET_MEMBER_SIZE', 'GET_MEMBER_TYPE', 'GET_MEMBER_ARRAY_LEN', 'offset_of', 'OFFSET_TO_END_OF_MEMBER',
+    'FRONT_SIZE_OF_MEMBER', 'container_of', 'typecheck', 'CHAR_2_NUM', 'NUM_2_CHAR', 'IS_NUM', 'IS_LETTER', 'RND',
+    'UP_CASE', 'LOWER_CASE', 'INC_SAT', 'B_CMD_TO_A_CMD', 'BA_CMD_TO_A_CMD', 'CASE_A_RETURN_B',
+    'CASE_OTHER_NAME_2_OWN_NAME', 'CASE_OWN_NAME_2_OTHER_NAME', 'CASE_ENUM_2_TEXT_RETURN', 'CASE_ENUM_RETURN_STR',
+    'SConstFactorial', 'SConstPow', 'CONST_FACTORIAL', 'CONST_POW', 'GET_VIRTUAL_FUNC_ADDR', '__LRY_tmp', '__dummy', '__dummy2',
+    'PP_NARG', 'PP_NARG_', 'PP_ARG_N', 'PP_RSEQ_N', 'MANY', 'ONE', 'ZERO', 'CHECK_MACRO_PARAMS_COUNT',
+    'CHECK_MACRO_PARAMS_COUNT_', 'CHECK_PARAMS_COUNT_ARG_N', 'CHECK_PARAMS_COUNT_RSEQ_N', 'STR', 'STR1', 'STR2',
+    'CONNECT_2_ARGS2', 'CONNECT_2_ARGS1', 'CONNECT_2_ARGS', 'REMOVE_BRACKETS1', 'REMOVE_BRACKETS',
+    '_1', '_2', '_3', '_4', '_5', '_6', '_7', '_8', '_9', '_10', '_11', '_12', '_13', '_14', '_15', '_16', '_17', '_18', '_19', '_20',
+    '_21', '_22', '_23', '_24', '_25', '_26', '_27', '_28', '_29', '_30', '_31', '_32', '_33', '_34', '_35', '_36', '_37', '_38', '_39', '_40',
+    '_41', '_42', '_43', '_44', '_45', '_46', '_47', '_48', '_49', '_50', '_51', '_52', '_53', '_54', '_55', '_56', '_57', '_58', '_59', '_60',
+    '_61', '_62', '_63', 'N', # Added placeholders from PP_ARG_N macro example
+    'FOR_EACH_1', 'FOR_EACH_2', 'FOR_EACH_3', 'FOR_EACH_4', 'FOR_EACH_5', 'FOR_EACH_6', 'FOR_EACH_7', 'FOR_EACH_8',
+    'FOR_EACH_9', 'FOR_EACH_10', 'FOR_EACH_11', 'FOR_EACH_12', 'FOR_EACH_13', 'FOR_EACH_14', 'FOR_EACH_15', 'FOR_EACH_16',
+    'FOR_EACH_', 'FOR_EACH', 'what', 'paramInfo', 'connectInfo',
+    # from headerComMacro.h
+    'Q_DISABLE_COPY', 'Q_DECLARE_PRIVATE', 'Q_DECLARE_PRIVATE_D', 'Q_DECLARE_PUBLIC', 'Q_D', 'Q_Q',
+    'SINGLETON', 'SINGLETON_C_D', 'qGetPtrHelper',
+    # from simpleComMacro - 简化版.h
+    'SAVE_DEBUG_LOG', 'SAVE_INFO_LOG', 'SAVE_ERROR_LOG', 'YES', 'NO',
+    # from std_def.h (Macros, Enums, Structs, Unions, Members)
+    'SI_DEFINED_UINT8', 'SI_DEFINED_UINT16', 'SI_DEFINED_UINT32', 'SI_DEFINED_INT8', 'SI_DEFINED_INT16',
+    'SI_DEFINED_INT32', 'SI_DEFINED_UINT64', 'SI_DEFINED_INT64', 'SI_INVALID_ID', 'SI_INVALID_CODE',
+    'SI_INVALID_INDEX', 'SI_INVALID_HANDLE', 'SI_INVALID_ADDRESS', 'SPECIALIZED_ERROR_CODE_BASE_VALUE',
+    'BMS_ERROR_CODE_BASE_VALUE', 'EWeekDay', 'EErrorCode',
+    'SI_MONDAY', 'SI_TUESDAY', 'SI_WEDNESDAY', 'SI_THURSDAY', 'SI_FRIDAY', 'SI_SATURDAY', 'SI_SUNDAY',
+    'ERROR_SUCCESS', 'ERROR_FAIL', 'ERROR_USER_NOT_FOUND', 'ERROR_PASSWD_ERROR', 'ERROR_PERMISSION_DENIED',
+    'ERROR_DATA_FORMAT_ERROR', 'ERROR_FUNCTION_NOT_SUPPORTED', 'ERROR_HEAD_FORMAT_ERROR', 'ERROR_CHECK_CODE_FAIL',
+    'ERROR_PACK_SIZE_TOO_BIG', 'ERROR_PACK_CMD_UNKNOWN', 'ERROR_BAD_PARAMETER', 'ERROR_SERVER_NOT_RESPONSE',
+    'ERROR_SERVER_NOT_REPLY', 'ERROR_TERM_NOT_RESPONSE', 'ERROR_TERM_NOT_REPLY', 'ERROR_DATA_BASE_ERROR',
+    'ERROR_NO_MEMORY', 'ERROR_ALREADY_INITIALIZED', 'ERROR_INVALID_DESCRIPTOR', 'ERROR_SYSCALL_FAIL',
+    'ERROR_CREATE_THREAD_FAIL', 'ERROR_SET_THREAD_DETACH_FAIL', 'ERROR_RECV_DATA_TIMEOUT', 'ERROR_TAIL_FORMAT_ERROR',
+    'ERROR_SEND_DATA_FAIL', 'ERROR_CREATE_FILE_FAIL', 'ERROR_DEL_FILE_FAIL', 'ERROR_OPEN_FILE_FAIL',
+    'ERROR_CLOSE_FILE_FAIL', 'ERROR_READ_FILE_FAIL', 'ERROR_WRITE_FILE_FAIL', 'ERROR_QUEUE_FULL',
+    'ERROR_QUEUE_EMPTY', 'ERROR_QUEUE_BUSY', 'ERROR_LOGIN_PASSWD_ERROR', 'ERROR_NO_ENOUGH_SPARE_BUF',
+    'ERROR_THIRD_CALL_FAIL', 'ERROR_NET_DISCONNECTED', 'ERROR_READ_IO_FAIL', 'ERROR_WRITE_IO_FAIL',
+    'ERROR_READ_PUBLIC_DATA_FAIL', 'ERROR_WRITE_PUBLIC_DATA_FAIL', 'ERROR_INVALID_OPERATION',
+    'ERROR_DATA_FIELD_SIZE_INCORRECT', 'ERROR_SIGNAL_REGISTRATION_FULL', 'ERROR_SIGNAL_SLOT_ALREADY_CONNECTED',
+    'ERROR_SIGNAL_SLOT_CONNECTION_POOL_FULL', 'ERROR_NO_SUCH_SIGNAL_SLOT_CONNECTION', 'ERROR_FILE_NAME_SIZE_BEYOND_LIMIT',
+    'ERROR_SAVE_RECORD_FAIL', 'ERROR_RESOURCES_BUSY', 'ERROR_GET_PTR_HANDLE_FAIL', 'ERROR_RECV_DATA_FAIL',
+    'ERROR_PACK_CMD_ALREADY_REGISTERED', 'ERROR_PACK_CMD_UNREGISTERED', 'ERROR_ALREADY_REGISTERED',
+    'ERROR_UNREGISTERED_FAIL', 'ERROR_LOGIN_FAIL', 'ERROR_SET_SYSTEM_TIME_FAIL', 'ERROR_NO_FREE_HANDLES',
+    'ERROR_INVALID_HANDLE', 'ERROR_INVALID_ID', 'ERROR_TIMEOUT', 'ERROR_DEVICE_BUSY', 'ERROR_NO_INIT',
+    'ERROR_BEYOND_MAX_COUNT', 'ERROR_BEYOND_MIN_COUNT', 'ERROR_LOCK_FAIL', 'ERROR_UNLOCK_FAIL',
+    'ERROR_STATE_ERROR', 'ERROR_NULL_POINTER', 'ERROR_BAD_PARAM_NULL_PTR', 'ERROR_FUNC_RETURN_NULL_PTR',
+    'ERROR_COUNT_ERROR', 'ERROR_NO_ENOUGH_MONEY', 'ERROR_REPETITIVE_OPERATION', 'ERROR_PARAMETER_NOT_COMPLETE',
+    'ERROR_LENGTH_INCORRECT', 'ERROR_DEVICE_NOT_AVAILABLE', 'ERROR_TASK_BEING_PERFORMED', 'ERROR_NOT_FOUND',
+    'ERROR_OPERA_FILE_FAIL', 'ERROR_TYPE_INCORRECT', 'ERROR_OPEN_DEVICE_FAIL', 'ERROR_ALREADY_STARTED',
+    'ERROR_ALREADY_STOPPED', 'ERROR_PEER_ADDR_INCORRECT', 'ERROR_GET_FAIL', 'ERROR_SET_FAIL', 'ERROR_PEER_EXEC_FAIL',
+    'ERROR_CHECK_FAIL', 'ERROR_ADDRESS_ERROR', 'ERROR_SWITCH_UNKNOWN_CASE', 'ERROR_RETRY_LATER',
+    'ERROR_OPERATION_NOT_ALLOWED', 'ERROR_FINAL_FAIL', 'ERROR_DEVICE_NOT_FOUND', 'ERROR_DYNAMIC_CAST_ERROR',
+    'ERROR_UNKNOWN_ERROR', 'ERROR_SYSTEM_FAULT', 'ERROR_CAN_SEND_DATA_FAIL', 'ERROR_HAS_BEEN_IN_CHARGE',
+    'ERROR_CHARGER_IN_PAUSE_MODE', 'ERROR_CC1_DISCONNECTED', 'ERROR_INSULATION_DETECTION_START_FAIL',
+    'ERROR_INSULATION_DETECTION_TIMEOUT', 'ERROR_INSULATION_DETECTION_ABNORMAL', 'ERROR_BMS_AUXILIARY_POWER_ABNORMAL',
+    'ERROR_BMS_AUXILIARY_POWER_NOT_MATCH', 'ERROR_BMS_AUXILIARY_POWER_START_FAIL', 'ERROR_START_CHARGING_TIMEOUT',
+    'ERROR_WAIT_BMS_BRM_TIMEOUT', 'ERROR_WAIT_BMS_BCP_TIMEOUT', 'ERROR_WAIT_BMS_BRO_TIMEOUT',
+    'ERROR_WAIT_BMS_BCS_TIMEOUT', 'ERROR_WAIT_BMS_BCL_TIMEOUT', 'ERROR_WAIT_BMS_BST_TIMEOUT',
+    'ERROR_WAIT_BMS_BSD_TIMEOUT', 'ERROR_HANDSHAKE_STAGE_TIMEOUT', 'ERROR_PARAM_CONFIG_STAGE_TIMEOUT',
+    'ERROR_CHARGING_STAGE_TIMEOUT', 'ERROR_CHARGING_END_STAGE_TIMEOUT',
+    'UInt32Bit', 'EventStruct', 'all', 'bit',
+    # from log.h & simpleLog.h (Logging, Debugging, Error Handling Macros)
+    'SIMPLE_PRINT', 'SIMPLE_LOG', 'MY_ASSERT', 'MY_DEBUG', 'MY_INFO', 'MY_ERROR', 'MY_SYSCALL_ERROR',
+    'ASSERT_PRINT', 'DEBUG_PRINT', 'DEBUG_LOG', 'DEBUG_SAVE', 'DEBUG', 'INFO_PRINT', 'INFO_LOG', 'INFO_SAVE', 'INFO',
+    'ERROR_PRINT', 'ERROR_LOG', 'ERROR_SAVE', 'ERROR', 'SYSCALL_ERROR_PRINT', 'SYSCALL_ERROR_LOG', 'SYSCALL_ERROR_SAVE', 'SYSCALL_ERROR',
+    'CALLFUNC_ERROR', 'NONE', 'TYPE_INT', 'TYPE_UINT', 'TYPE_LONG_INT', 'TYPE_LONG_UINT', 'TYPE_FLOAT', 'TYPE_DBL', 'TYPE_CHR', 'TYPE_STR', 'TYPE_PTR', 'TYPE_HEX',
+    'PRINT_ONE_TYPE_VARS', 'PRINT_ONE_TYPE_VARS_E', 'PRINT_ONE_TYPE_VARS_COMBINATION', 'PRINT_MANY_TYPE_VARS', 'PRINT_ONE_VAR', 'VAR_CONNECT_INFO',
+    'PRINT_PTR', 'PRINT_INT', 'PRINT_STR', 'PRINT_DBL', 'PRINT_CHR', 'PRINT_HEX', 'PRINT_PTR_E', 'PRINT_INT_E', 'PRINT_STR_E', 'PRINT_DBL_E', 'PRINT_CHR_E', 'PRINT_HEX_E',
+    'HERE_ENABLE', 'HERE', 'HERE_ERROR', 'HERE_ERROR_TEXT',
+    'SYSCALL', 'SYSCALL2', 'SYSCALL_FAIL_RETURN_DFL', 'SYSCALL2_FAIL_RETURN_DFL', 'SYSCALL_FAIL_RETURN_SPEC', 'SYSCALL2_FAIL_RETURN_SPEC',
+    'SYSCALL_FAIL_EXEC', 'SYSCALL2_FAIL_EXEC', 'SYSCALL_CHECK_SUCCVAL_RETURN_SPEC', 'SYSCALL_CHECK_FAILVAL_RETURN_SPEC', 'SYSCALL_CHECK_SUCCVAL_FAIL_EXEC',
+    'SYSCALL_CHECK_FAILVAL_FAIL_EXEC', 'SYSCALL_CHECK_RETVAL_FAIL_EXEC',
+    'CALLFUNC', 'CALLFUNC2', 'CALLFUNC_FAIL_RETURN', 'CALLFUNC2_FAIL_RETURN_DFL', 'CALLFUNC2_FAIL_RETURN_SPEC', 'CALLFUNC_FAIL_EXEC', 'CALLFUNC2_FAIL_EXEC',
+    'CALLFUNC_CHECK_SUCCVAL_RETURN_SPEC', 'CALLFUNC_CHECK_FAILVAL_RETURN_SPEC', 'CALLFUNC_CHECK_SUCCVAL_FAIL_EXEC', 'CALLFUNC_CHECK_FAILVAL_FAIL_EXEC',
+    'CALLFUNC_CHECK_RETVAL_FAIL_EXEC', 'CALLFUNC_CHECK_RETVAL2_FAIL_EXEC', 'CALLFUNC_FAIL_SPECVAL_EXEC', 'CALLFUNC2_FAIL_SPECVAL_EXEC',
+    'CALLFUNC_CHECK_SUCCVAL_FAIL_SPECVAL_EXEC', 'CALLFUNC_CHECK_FAILVAL_FAIL_SPECVAL_EXEC',
+    'MALLOC_MEM_FAIL_EXIT', 'MALLOC_MEM_FAIL_RETURN_DFL', 'MALLOC_MEM_FAIL_EXEC', 'MALLOC_DEBUG_ENABLE', 'FREE_DEBUG_ENABLE', 'MALLOC_DEBUG', 'FREE_DEBUG',
+    'DELETE', 'DELETE_ARRAY', 'DELETE_RDONLY', 'DELETE_ARRAY_RDONLY',
+    'LOCK_DEBUG_ENABLE', 'CALL_LOCK', 'CALL_UNLOCK',
+    'CHECK_FAIL_EXEC', 'CHECK_FAIL_RETURN_SPEC', 'CHECK_FAIL_RETURN_DFL', 'PROCESS_ONE_COND', 'CHECK_MANY_COND', 'CHECK_ONE_COND',
+    'SELECT_CHECK2', 'SELECT_CHECK1', 'SELECT_CHECK_MACRO', 'CHECK_PTR_FAIL_EXEC', 'CHECK_ONE_FAIL_EXEC', 'CHECK_MANY_FAIL_EXEC',
+    'CHECK_VALUE_FAIL_EXEC', 'CHECK_INT_EQUAL_VALUE', 'CHECK_INT_EQUAL_VALUE_FAIL_EXEC', 'CHECK_INT_VALUE_FAIL_EXEC', 'CHECK_INT_VALUE_FAIL_RETURN_SPEC',
+    'CHECK_INT_VALUE_FAIL_RETURN_DFL', 'CHECK_INT_VALUE', 'CHECK_ERROR_CODE_FAIL_RETURN', 'CHECK_ERROR_CODE_FAIL_EXEC', 'CHECK_VALUE_FAIL_RETURN_SPEC',
+    'CHECK_VALUE_FAIL_RETURN_DFL', 'CHECK_VALUE',
+    'WELCOME_INFO', 'PRINT_ARRAY_HEX_MEM', 'PRINT_DATA_HEX_MEM', 'PRINT_DATA_HEX', 'LOG_DATA_HEX', 'SAVE_DATA_HEX',
+    'PRINT_REPORT_SEND_INFO', 'PRINT_REPORT_RECV_INFO', 'PRINT_RESPONSE_SEND_INFO', 'PRINT_RESPONSE_RECV_INFO',
+    'SWITCH_DEFAULT_CASE_RETURN_DFL', 'SWITCH_DEFAULT_CASE_RETURN_SPEC', 'SWITCH_DEFAULT_CASE_EXEC',
+    'SET_THREAD_NAME_PRINT', 'HERE_EMIT',
+    'DEBUG_COLOR', 'INFO_COLOR', 'ERROR_COLOR', 'CLOSE_DEBUG_COLOR', 'CLOSE_INFO_COLOR', 'CLOSE_ERROR_COLOR',
+    'DEBUG_LEVEL', 'INFO_LEVEL', 'ERROR_LEVEL', 'LOCATION_INFO', 'LOCATION_PARAM', 'SYSCALL_EXTRA_INFO', 'PRINT',
+    '__pLog_LRY_temp', '__buf_LRY_temp', '__SYSCALL_temp_ret', '__ret_temp', '__check_count_temp',
 }
 
 def get_script_dir():
@@ -403,7 +798,7 @@ class Application(tk.Tk):
             return
         
         if new_kw in self.keywords:
-            messagebox.showwarning("重复添加", f"关键词 '{new_kw}' 已存在")
+            messagebox.showwarning("重复添加", f"查看关键词 '{new_kw}' 已存在")
             return
         
         # 弹出映射值输入对话框
@@ -1168,7 +1563,7 @@ class Application(tk.Tk):
                 matches = keyword_pattern.findall(content)
                 keywords.update(
                     match for match in matches 
-                    if len(match) > MIN_KEYWORD_LENGTH and match not in C_KEYWORDS and (file_names is None or match not in file_names)
+                    if len(match) > MIN_KEYWORD_LENGTH and match not in C_KEYWORDS and match not in EXCLUDED_IDENTIFIERS and (file_names is None or match not in file_names)
                 )
         except Exception as e:
             print(f"无法读取文件 {file_path}：{str(e)}")
