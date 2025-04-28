@@ -14,7 +14,7 @@ from openai import OpenAI
 # use_ask = "总结以下充电桩企业五天内的新闻：特锐德，国电南瑞，​许继集团，易事特，星星充电，科士达，超翔科技，奥特迅，南方电网，比亚迪，​​阳光电源，盛弘股份，中恒电气，和顺电气，​通合科技，英可瑞，动力源，​科陆电子，万马新能源，​泰坦科技，依威能源，华为数字能源，普天新能源，​京能新能源，驴充充，正泰电器，德力西电气，天合光能，宁德时代，汇川技术，麦格米特，思源电气，中能电气，​科大智能，长园集团，置信电气，平高电气，国轩高科，亿纬锂能，正泰安能，绿能慧充​。"
 # use_ask = "分析近期充电桩产业动态信息,尤其关注以下企业：特锐德，国电南瑞，​许继集团，易事特，星星充电，科士达，超翔科技，奥特迅，南方电网，比亚迪，​​阳光电源，盛弘股份，中恒电气，和顺电气，​通合科技，英可瑞，动力源，​科陆电子，万马新能源，​泰坦科技，依威能源，华为数字能源，普天新能源，​京能新能源，驴充充，正泰电器，德力西电气，天合光能，宁德时代，汇川技术，麦格米特，思源电气，中能电气，​科大智能，长园集团，置信电气，平高电气，国轩高科，亿纬锂能，正泰安能，绿能慧充​。"
 # use_ask = "总结最近期全球重大新闻。"
-use_ask = "盛弘电气股份有限公司的股票价格和走势分析"
+use_ask = "现在时间，和最近一周内充电桩企业动态，关注以下企业：特锐德，国电南瑞，​许继集团，易事特，星星充电，科士达，奥特迅，南方电网，比亚迪，​​阳光电源，盛弘股份，中恒电气，和顺电气，​通合科技，英可瑞，​科陆电子，泰坦科技，华为数字能源，​正泰电器，宁德时代，麦格米特，中能电气，​长园集团，绿能慧充"
 # use_ask = "汇总最近十天内充电桩的行业动态详细信息，重点关注下：星星充电，科士达，比亚迪，​​阳光电源，盛弘股份，中恒电气，和顺电气，​通合科技，英可瑞，​科陆电子，​泰坦科技，华为数字能源，正泰电器，宁德时代，麦格米特，​科大智能，长园集团，绿能慧充​。"
 
 # 定义腾讯TX的 API 密钥和基础 URL
@@ -54,7 +54,7 @@ def get_openai_response(content):
                 }
             ],
             extra_body={
-                # "enable_enhancement": True,  # <- 自定义参数
+                "enable_enhancement": True,  # <- 自定义参数
                 "EnableEnhancement": True,
                 # "enable_deep_search": True,  # <- 自定义参数
                 "EnableDeepSearch": True,  # <- 自定义参数
@@ -67,7 +67,7 @@ def get_openai_response(content):
     except Exception as e:
         print(f"调用 OpenAI 失败: {e}")
         return ""
-def send_message():
+def qywxRobot_Send_Message():
     markdown_content = get_openai_response(use_ask)
     # 简单转换为 Markdown 格式，添加换行符
     markdown_contents = markdown_content.replace('- ', '>- ')
@@ -101,7 +101,7 @@ def get_next_run_time():
 while True:
     wait_seconds = get_next_run_time()
     # time.sleep(wait_seconds)
-    # send_message()
+    # qywxRobot_Send_Message()
 
     
     markdown_content = get_openai_response(use_ask)
