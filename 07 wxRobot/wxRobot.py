@@ -6,8 +6,6 @@ import json
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 import urllib.parse 
-# from http import HTTPStatus
-# import dashscope
 
 import os
 from openai import OpenAI
@@ -84,6 +82,8 @@ def selenium_baidu_search(keywords):
     edge_options.add_argument('--headless')  # 无头模式，不显示浏览器窗口
     # 禁用浏览器日志输出
     edge_options.add_argument('--log-level=3')
+    # 忽略证书验证
+    edge_options.add_argument('--ignore-certificate-errors')
     # 请根据实际情况修改 ChromeDriver 的路径
     service = EdgeService('C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedgedriver.exe')
     driver = webdriver.Edge(service=service, options=edge_options)
@@ -97,25 +97,25 @@ def selenium_baidu_search(keywords):
             for keyword in keywords:
                 # 构建百度搜索 URL
                 encoded_keyword = urllib.parse.quote_plus(keyword)
-                url = f"https://news.qq.com/search?query={encoded_keyword}&page=1"
-                # url = f"https://www.baidu.com/s?tn=news&rtt=1&bsst=1&wd={encoded_keyword}&cl=2"
+                # url = f"https://news.qq.com/search?query={encoded_keyword}&page=1"
+                url = f"https://www.baidu.com/s?tn=news&rtt=1&bsst=1&wd={encoded_keyword}&cl=2"
                 
                 # 打开搜索页面
                 driver.get(url)
-                # time.sleep(3)  # 等待页面加载
+                time.sleep(2)
 
                 from selenium.webdriver.support.ui import WebDriverWait
                 from selenium.webdriver.support import expected_conditions as EC
                 # 使用显式等待确保页面加载完成
                 try:
                     WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((By.CSS_SELECTOR, ".card-margin.img-text-card"))
+                        EC.presence_of_element_located((By.CSS_SELECTOR, ".result-op.c-container.xpath-log.new-pmd"))
                     )
                 except Exception as e:
                     print(f"等待搜索结果加载失败: {e}")
 
                 # 提取搜索结果，使用百度新闻搜索结果的常见选择器
-                cards = driver.find_elements(By.CSS_SELECTOR, ".card-margin.img-text-card")
+                cards = driver.find_elements(By.CSS_SELECTOR, ".result-op.c-container.xpath-log.new-pmd")
 
                 if not cards:
                     print(f"未找到关键词 {keyword} 的搜索结果，请检查选择器或网络连接。")
@@ -125,40 +125,44 @@ def selenium_baidu_search(keywords):
 
                 for card in cards:
                     # 提取标题
-                    title_element = card.find_element(By.CSS_SELECTOR, "p.title")
-                    title = title_element.text
+                    try:
+                        title_element = card.find_element(By.CSS_SELECTOR, "h3.news-title_1YtI1 a")
+                        title = title_element.text
+                    except Exception as e:
+                        title = "未知标题"
+                        print(f"提取标题失败: {e}")
 
                     # 提取描述
-                    description_element = card.find_element(By.CSS_SELECTOR, "p.description")
-                    description = description_element.text
+                    try:
+                        description_element = card.find_element(By.CSS_SELECTOR, "div.c-span12 span.c-font-normal.c-color-text")
+                        description = description_element.text
+                    except Exception as e:
+                        description = "未知描述"
+                        print(f"提取描述失败: {e}")
 
                     # 提取链接
                     try:
-                        link_element = card.find_element(By.CSS_SELECTOR, "a.hover-link")
+                        link_element = card.find_element(By.CSS_SELECTOR, "h3.news-title_1YtI1 a")
                         link = link_element.get_attribute('href')
                     except Exception as e:
-                        # print(f"提取作者信息失败: {e}")
-                        author = "未知"
+                        link = "未知链接"
+                        print(f"提取链接失败: {e}")
 
-                    # 提取作者，添加显式等待
+                    # 提取作者
                     try:
-                        author_element = WebDriverWait(card, 1).until(
-                            EC.presence_of_element_located((By.CSS_SELECTOR, "span.author"))
-                        )
+                        author_element = card.find_element(By.CSS_SELECTOR, "div.news-source_Xj4Dv a.source-link_Ft1ov span.c-color-gray")
                         author = author_element.text
                     except Exception as e:
-                        # print(f"提取作者信息失败: {e}")
-                        author = "未知"
+                        author = "未知作者"
+                        print(f"提取作者失败: {e}")
 
-                    # 提取时间，添加显式等待
+                    # 提取时间
                     try:
-                        time_element = WebDriverWait(card, 1).until(
-                            EC.presence_of_element_located((By.CSS_SELECTOR, "span.time"))
-                        )
+                        time_element = card.find_element(By.CSS_SELECTOR, "span.c-color-gray2.c-font-normal.c-gap-right-xsmall")
                         time_str = time_element.text
                     except Exception as e:
-                        # print(f"提取时间信息失败: {e}")
-                        time_str = "未知"
+                        time_str = "未知时间"
+                        print(f"提取时间失败: {e}")
 
                     # 将结果存入字典
                     result = {
@@ -171,22 +175,16 @@ def selenium_baidu_search(keywords):
 
                     results.append(result)
 
-                # print("keyword",results)
-
                 for result in results:
-                    # markdown_result += f"<font color=\"warning\">{result['title']}</font>\n"
-                    # markdown_result += f">作者: <font color=\"comment\">{result['author']}</font>\n"
-                    # markdown_result += f">时间: <font color=\"comment\">{result['time']}</font>\n"
-                    # markdown_result += f">描述: <font color=\"comment\">{result['description']}</font>\n"
-                    # markdown_result += f">链接: <font color=\"comment\">[{result['link']}]({result['link']})</font>\n\n"
                     markdown_result += f"# {result['title']}\n"
-                    # markdown_result += f"## 作者: {result['author']}\n"
+                    markdown_result += f"## 作者: {result['author']}\n"
                     markdown_result += f"## 时间: {result['time']}\n"
                     markdown_result += f"## 描述: {result['description']}\n"
-                    # markdown_result += f"## 链接: [{result['link']}]({result['link']})\n\n"
+                    markdown_result += f"## 链接: [{result['link']}]({result['link']})\n\n"
 
-                time.sleep(2)
-
+                # print(f"关键词 {keyword} 的搜索结果已保存。",results)
+                
+            print("搜索结果已保存。",markdown_result)
             return markdown_result
 
         except Exception as e:
@@ -354,11 +352,11 @@ def get_next_run_time():
 while True:
     wait_seconds = get_next_run_time()
 
-    if 1:
+    if 0:
         time.sleep(wait_seconds)
         qywxRobot_Send_Message()
     else:
         search_result = selenium_baidu_search(use_ask)
-        # print(search_result)
+        print(search_result)
         time.sleep(60) 
     
